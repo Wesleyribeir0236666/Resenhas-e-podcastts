@@ -1,340 +1,682 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Resenha & Podcasts · Premium</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background-color: #f5f7fa; font-family: 'Inter', sans-serif; color: #1e293b; line-height: 1.6; padding: 2rem 1.5rem; }
-    .container { max-width: 1400px; margin: 0 auto; }
-    
-    /* Navegação entre abas */
-    .nav-tabs { display: flex; justify-content: center; gap: 2rem; margin-bottom: 2rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 1rem; }
-    .nav-tab { font-family: 'Libre Baskerville', serif; font-size: 1.2rem; color: #64748b; cursor: pointer; padding: 0.5rem 1rem; transition: all 0.2s; border-bottom: 3px solid transparent; }
-    .nav-tab:hover { color: #0f172a; }
-    .nav-tab.active { color: #0f172a; border-bottom-color: #0f172a; font-weight: 600; }
-    .nav-tab i { margin-right: 8px; }
-    
-    .header { text-align: center; margin-bottom: 3rem; border-bottom: 2px solid #0f172a; padding-bottom: 1.5rem; }
-    h1 { font-family: 'Libre Baskerville', serif; font-size: 3.2rem; font-weight: 700; color: #0f172a; margin-bottom: 0.5rem; }
-    .subhead { font-family: 'Libre Baskerville', serif; font-style: italic; font-size: 1.2rem; color: #475569; margin-bottom: 1.8rem; }
-    
-    .plan-indicator { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 1.5rem; }
-    .plan-badge { background: #f1f5f9; padding: 8px 20px; border-radius: 40px; font-size: 0.9rem; font-weight: 500; border: 1px solid #e2e8f0; }
-    .plan-badge i { margin-right: 8px; }
-    .plan-badge.free { background: #fff; color: #0f172a; }
-    .plan-badge.premium { background: #fbbf24; color: #0f172a; border-color: #f59e0b; }
-    .usage-text { font-size: 0.9rem; color: #64748b; }
-    .upgrade-link { color: #8b5cf6; font-weight: 600; cursor: pointer; text-decoration: underline; margin-left: 10px; }
-    
-    .area-selector { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; margin-top: 1rem; }
-    .area-btn { background: transparent; border: 1.5px solid #cbd5e1; color: #334155; font-family: 'Inter', sans-serif; font-weight: 500; font-size: 1rem; padding: 0.7rem 1.8rem; border-radius: 40px; cursor: pointer; transition: all 0.25s ease; }
-    .area-btn:hover { border-color: #1e293b; background-color: #f8fafc; }
-    .area-btn.active { background-color: #0f172a; border-color: #0f172a; color: white; }
-    
-    .results-info { margin: 2rem 0 1.5rem; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; color: #64748b; border-left: 4px solid #0f172a; padding-left: 1rem; }
-    .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 2rem; }
-    
-    .card { background: white; border-radius: 18px; padding: 1.8rem; box-shadow: 0 15px 30px -12px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0; transition: all 0.3s; display: flex; flex-direction: column; }
-    .card:hover { transform: translateY(-6px); box-shadow: 0 25px 40px -16px rgba(15, 23, 42, 0.12); }
-    .card-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; font-size: 0.85rem; font-weight: 500; color: #64748b; }
-    .area-tag { background: #eef2ff; color: #1e293b; padding: 0.2rem 0.9rem; border-radius: 30px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
-    .card-title { font-family: 'Libre Baskerville', serif; font-size: 1.5rem; font-weight: 700; line-height: 1.3; margin-bottom: 0.8rem; color: #0f172a; }
-    .card-authors { font-size: 0.9rem; color: #475569; margin-bottom: 1.2rem; font-style: italic; }
-    
-    .resenha-label { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; margin-bottom: 0.3rem; display: flex; align-items: center; gap: 8px; }
-    .ia-badge { background: #8b5cf6; color: white; padding: 2px 8px; border-radius: 20px; font-size: 0.65rem; }
-    
-    .resenha-wrapper { position: relative; flex-grow: 1; margin-bottom: 1.5rem; }
-    .resenha-text { font-size: 0.95rem; color: #1e293b; line-height: 1.6; border-left: 2px solid #e2e8f0; padding-left: 1rem; min-height: 120px; }
-    
-    .resenha-text.blurred { position: relative; max-height: 80px; overflow: hidden; }
-    .resenha-text.blurred::after { content: ""; position: absolute; bottom: 0; left: 0; right: 0; height: 50px; background: linear-gradient(to bottom, transparent, white); pointer-events: none; }
-    .blur-overlay { margin-top: -20px; margin-bottom: 15px; text-align: center; position: relative; z-index: 2; }
-    .btn-unlock { background: #fbbf24; border: none; color: #0f172a; font-weight: 600; padding: 8px 18px; border-radius: 40px; font-size: 0.85rem; cursor: pointer; border: 1px solid #f59e0b; transition: all 0.2s; box-shadow: 0 4px 10px rgba(251, 191, 36, 0.2); }
-    .btn-unlock:hover { background: #f59e0b; transform: scale(1.02); }
-    .btn-unlock i { margin-right: 6px; }
-    
-    .action-buttons { display: flex; gap: 10px; margin-top: auto; }
-    .podcast-btn, .youtube-btn { flex: 1; padding: 0.8rem; border-radius: 50px; font-weight: 500; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; border: none; }
-    .podcast-btn { background: #1DB954; color: white; }
-    .podcast-btn:hover { background: #1ed760; transform: translateY(-2px); }
-    .youtube-btn { background: #FF0000; color: white; }
-    .youtube-btn:hover { background: #cc0000; transform: translateY(-2px); }
-    .btn-gerar { background: #f1f5f9; border: 1px solid #e2e8f0; color: #0f172a; padding: 0.5rem 1rem; border-radius: 30px; font-size: 0.8rem; cursor: pointer; margin-top: 10px; width: 100%; }
-    
-    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 1000; visibility: hidden; opacity: 0; transition: all 0.2s; }
-    .modal-overlay.active { visibility: visible; opacity: 1; }
-    .modal { background: white; max-width: 450px; width: 90%; border-radius: 32px; padding: 2rem; box-shadow: 0 30px 60px rgba(0,0,0,0.2); text-align: center; }
-    .modal h2 { font-family: 'Libre Baskerville', serif; font-size: 2rem; margin-bottom: 0.5rem; }
-    .modal .price { font-size: 2.5rem; font-weight: 700; color: #0f172a; margin: 1rem 0; }
-    .modal .price small { font-size: 1rem; font-weight: 400; color: #64748b; }
-    .modal ul { text-align: left; margin: 1.5rem 0; list-style: none; }
-    .modal li { margin-bottom: 10px; }
-    .modal li i { color: #10b981; margin-right: 10px; }
-    .btn-primary { background: #0f172a; color: white; border: none; padding: 1rem 2rem; border-radius: 60px; font-weight: 600; font-size: 1.1rem; width: 100%; cursor: pointer; transition: all 0.2s; }
-    .btn-primary:hover { background: #1e293b; transform: scale(1.02); }
-    .modal-close { margin-top: 1rem; color: #94a3b8; text-decoration: underline; cursor: pointer; font-size: 0.9rem; }
-    
-    .footer { margin-top: 5rem; text-align: center; font-size: 0.85rem; color: #94a3b8; border-top: 1px solid #e2e8f0; padding-top: 2rem; }
-    .empty-state { grid-column: 1 / -1; text-align: center; padding: 4rem; background: white; border-radius: 24px; color: #64748b; }
-    
-    @media (max-width: 600px) {
-      body { padding: 1.2rem; }
-      h1 { font-size: 2.4rem; }
-      .cards-grid { grid-template-columns: 1fr; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resenha & Podcasts Acadêmicos</title>
+
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        :root {
+            --bg: #f5f5f7;
+            --card-bg: #ffffff;
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --text-tertiary: #515154;
+            --border: #e5e5ea;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.06);
+            --shadow-lg: 0 20px 40px rgba(0,0,0,0.08);
+            --radius: 18px;
+            --radius-sm: 12px;
+            --transition: 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+            --dourado: #f59e0b;
+            --roxo: #8b5cf6;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+        }
+
+        /* ========== NAVEGAÇÃO ========== */
+        .nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(245, 245, 247, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 0 1.5rem;
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 52px;
+        }
+
+        .nav-logo {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover { color: var(--text-primary); }
+
+        /* ========== HERO ========== */
+        .hero {
+            text-align: center;
+            padding: 5rem 1.5rem 3rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 3.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.5px;
+            line-height: 1.15;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            line-height: 1.5;
+        }
+
+        /* ========== GRADE DE ÁREAS ========== */
+        .areas-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem 4rem;
+        }
+
+        .section-title {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .areas-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.25rem;
+        }
+
+        .area-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 1.75rem 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .area-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: #d1d1d6;
+        }
+
+        .area-card.ativa {
+            border-color: var(--roxo);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+
+        .area-icone {
+            font-size: 2.2rem;
+        }
+
+        .area-numero {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--roxo);
+            margin-bottom: -0.5rem;
+        }
+
+        .area-nome {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.3;
+        }
+
+        .area-count {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        /* ========== PAINEL DE SUBÁREAS ========== */
+        .subareas-container {
+            max-width: 1200px;
+            margin: 0 auto 3rem;
+            padding: 0 1.5rem;
+            display: none;
+        }
+
+        .subareas-container.visivel {
+            display: block;
+        }
+
+        .subareas-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+        }
+
+        .subareas-header h3 {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .btn-fechar {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 1.5rem;
+            padding: 0.5rem;
+            transition: color 0.2s;
+        }
+
+        .btn-fechar:hover { color: var(--text-primary); }
+
+        .subareas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1rem;
+        }
+
+        .subarea-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-sm);
+            padding: 1.25rem;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition);
+            text-decoration: none;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .subarea-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            border-color: #d1d1d6;
+        }
+
+        .subarea-icone {
+            font-size: 1.4rem;
+        }
+
+        .subarea-nome {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        /* ========== SEÇÃO ARTIGOS EM DESTAQUE ========== */
+        .destaque-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+            display: none;
+        }
+
+        .destaque-section.visivel {
+            display: block;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-titulo {
+            font-family: 'Libre Baskerville', serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-autores {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+        }
+
+        .card-resenha {
+            font-size: 0.9rem;
+            color: var(--text-tertiary);
+            line-height: 1.5;
+            flex-grow: 1;
+            margin-bottom: 1rem;
+        }
+
+        .card-botoes {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-podcast, .btn-video {
+            flex: 1;
+            padding: 0.6rem;
+            border-radius: 50px;
+            font-weight: 500;
+            font-size: 0.8rem;
+            cursor: pointer;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            transition: all 0.2s;
+        }
+
+        .btn-podcast { background: #1DB954; color: white; }
+        .btn-podcast:hover { background: #1ed760; }
+        .btn-video { background: #FF0000; color: white; }
+        .btn-video:hover { background: #cc0000; }
+
+        /* ========== RODAPÉ ========== */
+        .footer {
+            text-align: center;
+            padding: 2rem 1.5rem;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border);
+            margin-top: 2rem;
+        }
+
+        .footer .selo {
+            max-width: 700px;
+            margin: 0 auto 1rem;
+            font-size: 0.75rem;
+            line-height: 1.6;
+            color: var(--text-tertiary);
+        }
+
+        /* ========== RESPONSIVO ========== */
+        @media (max-width: 900px) {
+            .areas-grid { grid-template-columns: repeat(2, 1fr); }
+            .hero h1 { font-size: 2.2rem; }
+        }
+
+        @media (max-width: 500px) {
+            .areas-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 1.8rem; }
+            .nav-links { gap: 1rem; }
+            .cards-grid { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-  <!-- Navegação entre Abas -->
-  <div class="nav-tabs">
-    <div class="nav-tab active"><i class="fas fa-newspaper"></i> Resenhas</div>
-    <div class="nav-tab" onclick="window.location.href='podcast.html'"><i class="fas fa-mug-hot"></i> Café & Carreira</div>
-    <div class="nav-tab" onclick="alert('Em breve!')"><i class="fas fa-user"></i> Minha Conta</div>
-  </div>
 
-  <header class="header">
-    <h1>Resenha & Podcasts</h1>
-    <div class="subhead">Curadoria crítica · DeepSeek IA · Premium</div>
-    
-    <div class="plan-indicator">
-      <span class="plan-badge free" id="planBadge"><i class="fas fa-user"></i> Plano Gratuito</span>
-      <span class="usage-text" id="usageDisplay">0/10 resenhas este mês</span>
-      <span class="upgrade-link" id="upgradeLink"><i class="fas fa-crown"></i> Assinar Premium</span>
+    <!-- ==================== NAVEGAÇÃO ==================== -->
+    <nav class="nav">
+        <div class="nav-inner">
+            <a href="index.html" class="nav-logo">☕ Resenha & Podcasts</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Resenhas</a></li>
+                <li><a href="podcast.html">Café & Carreira</a></li>
+                <li><a onclick="alert('Em breve!')">Minha Conta</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ==================== HERO ==================== -->
+    <section class="hero">
+        <h1>Explore pelas grandes áreas do conhecimento</h1>
+        <p>Selecione uma área para ver os artigos que mais impactam sua carreira.</p>
+    </section>
+
+    <!-- ==================== 8 GRANDES ÁREAS DO CNPQ ==================== -->
+    <section class="areas-section">
+        <h2 class="section-title">Grandes Áreas do CNPq</h2>
+        <div class="areas-grid" id="areasGrid">
+            <!-- Preenchido pelo JavaScript -->
+        </div>
+    </section>
+
+    <!-- ==================== PAINEL DE SUBÁREAS ==================== -->
+    <div class="subareas-container" id="subareasContainer">
+        <div class="subareas-header">
+            <h3 id="subareasTitulo">Subáreas</h3>
+            <button class="btn-fechar" onclick="fecharSubareas()">✕</button>
+        </div>
+        <div class="subareas-grid" id="subareasGrid"></div>
     </div>
 
-    <div class="area-selector">
-      <button class="area-btn active" data-area="todos">Todos</button>
-      <button class="area-btn" data-area="Inteligência Artificial">IA</button>
-      <button class="area-btn" data-area="Medicina">Medicina</button>
-      <button class="area-btn" data-area="Mudanças Climáticas">Clima</button>
-      <button class="area-btn" data-area="Filosofia">Filosofia</button>
-    </div>
-  </header>
+    <!-- ==================== ARTIGOS EM DESTAQUE ==================== -->
+    <section class="destaque-section" id="destaqueSection">
+        <h2 class="section-title">Artigos em Destaque</h2>
+        <div class="cards-grid" id="destaqueCards"></div>
+    </section>
 
-  <div class="results-info"><span id="resultsCount">6</span> artigos essenciais</div>
-  <div id="cardsContainer" class="cards-grid"></div>
-  <footer class="footer">Resenhas via DeepSeek · © 2026</footer>
-</div>
-
-<div class="modal-overlay" id="upgradeModal">
-  <div class="modal">
-    <i class="fas fa-crown" style="font-size: 3rem; color: #fbbf24;"></i>
-    <h2>Resenha Premium</h2>
-    <p style="color: #64748b;">Acesso ilimitado a resenhas completas</p>
-    <div class="price">R$ 19,90 <small>/mês</small></div>
-    <ul>
-      <li><i class="fas fa-check-circle"></i> Resenhas de <strong>400+ caracteres</strong></li>
-      <li><i class="fas fa-check-circle"></i> Análise crítica completa (sem blur)</li>
-      <li><i class="fas fa-check-circle"></i> Acesso ilimitado (sem limite de 10/mês)</li>
-      <li><i class="fas fa-check-circle"></i> Sugestões de podcasts e vídeos</li>
-    </ul>
-    <button class="btn-primary" id="simulatePaymentBtn"><i class="fas fa-lock-open"></i> Assinar Agora (Simular)</button>
-    <div class="modal-close" id="closeModalBtn">Talvez mais tarde</div>
-  </div>
-</div>
-
-<script>
-  // ========== CONFIGURAÇÃO ==========
-  // ⚠️ ATENÇÃO: Para produção, use o Cloudflare Worker. Esta chave é apenas para teste local
-  
-  
-  // ========== SIMULAÇÃO DE USUÁRIO ==========
-  let userTier = 'free';
-  let monthlyUsage = parseInt(localStorage.getItem('monthlyUsage')) || 0;
-  const currentMonth = new Date().getMonth() + '-' + new Date().getFullYear();
-  const storedMonth = localStorage.getItem('usageMonth');
-  
-  if (storedMonth !== currentMonth) {
-    monthlyUsage = 0;
-    localStorage.setItem('usageMonth', currentMonth);
-  }
-  
-  function updateUsageUI() {
-    document.getElementById('usageDisplay').textContent = `${monthlyUsage}/10 resenhas este mês`;
-    const badge = document.getElementById('planBadge');
-    if (userTier === 'premium') {
-      badge.className = 'plan-badge premium';
-      badge.innerHTML = '<i class="fas fa-crown"></i> Premium Ilimitado';
-    } else {
-      badge.className = 'plan-badge free';
-      badge.innerHTML = '<i class="fas fa-user"></i> Plano Gratuito';
-    }
-  }
-  
-  function incrementUsage() {
-    if (userTier === 'free') {
-      monthlyUsage++;
-      localStorage.setItem('monthlyUsage', monthlyUsage);
-      updateUsageUI();
-    }
-  }
-  
-  function canAccessFullResenha() {
-    return userTier === 'premium' || monthlyUsage < 10;
-  }
-  
-  // ========== ARTIGOS MOCKADOS ==========
-  const artigosMock = [
-    { id: 1, titulo: "Attention Is All You Need", autores: "Vaswani et al.", ano: 2023, area: "Inteligência Artificial", abstract: "The dominant sequence transduction models are based on complex recurrent or convolutional neural networks. We propose the Transformer, based solely on attention mechanisms.", resenha: null },
-    { id: 2, titulo: "GLP-1 Agonists: Beyond Diabetes", autores: "Drucker & Holst", ano: 2024, area: "Medicina", abstract: "GLP-1 receptor agonists show cardioprotective and neuroprotective effects beyond glycemic control and weight loss.", resenha: null },
-    { id: 3, titulo: "Exceeding 1.5°C triggers tipping points", autores: "McKay et al., Science", ano: 2022, area: "Mudanças Climáticas", abstract: "At 1.5°C warming, multiple climate tipping points become possible, including Greenland ice sheet collapse.", resenha: null },
-    { id: 4, titulo: "What Is It Like to Be a LLM?", autores: "Chalmers", ano: 2023, area: "Filosofia", abstract: "Applying the hard problem of consciousness to large language models.", resenha: null },
-    { id: 5, titulo: "Sparks of AGI", autores: "Bubeck et al.", ano: 2023, area: "Inteligência Artificial", abstract: "GPT-4 shows remarkable capabilities suggesting sparks of artificial general intelligence.", resenha: null },
-    { id: 6, titulo: "Lecanemab in Alzheimer's", autores: "van Dyck et al.", ano: 2022, area: "Medicina", abstract: "Lecanemab reduced amyloid and moderately lessened cognitive decline.", resenha: null }
-  ];
-
-  // ========== IA: RESENHA ROBUSTA (400+ CARACTERES) ==========
-  // ========== IA: RESENHA ROBUSTA VIA WORKER (SEGURO) ==========
-  // Substitua pela URL real do seu Cloudflare Worker
-  const WORKER_URL = "https://crimson-hall-565c.wy30032000.workers.dev";
-  
-  async function gerarResenhaComIA(artigo) {
-    const prompt = `Você é um curador acadêmico sênior. Escreva uma resenha crítica ROBUSTA em português (NO MÍNIMO 400 CARACTERES).
-    
-ESTRUTURA:
-1. CONTEXTO: Relevância atual.
-2. TESE CENTRAL: Principal descoberta.
-3. ANÁLISE CRÍTICA: Limitação ou implicação polêmica.
-4. PARA QUEM: Perfil do leitor.
-
-Título: ${artigo.titulo}
-Autores: ${artigo.autores}
-Área: ${artigo.area}
-Abstract: ${artigo.abstract || "Não disponível"}`;
-
-    try {
-      const resposta = await fetch(WORKER_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          messages: [{ role: "user", content: prompt }],
-          max_tokens: 800
-        })
-      });
-
-      const data = await resposta.json();
-      
-      if (data.error) {
-        console.error("Erro do Worker:", data);
-        return `⚠️ Erro: ${data.details || data.error}`;
-      }
-      
-      return data.choices[0].message.content.trim();
-      
-    } catch (error) {
-      console.error("Erro de conexão:", error);
-      return "⚠️ Erro de conexão. Verifique sua internet.";
-    }
-  }
-
-  // ========== RENDERIZAÇÃO COM BLUR ==========
-  const container = document.getElementById('cardsContainer');
-  const resultsSpan = document.getElementById('resultsCount');
-  let currentArea = 'todos';
-
-  async function renderCards(areaFiltro) {
-    let filtrados = areaFiltro === 'todos' ? [...artigosMock] : artigosMock.filter(a => a.area === areaFiltro);
-    resultsSpan.textContent = filtrados.length;
-    
-    if (filtrados.length === 0) {
-      container.innerHTML = `<div class="empty-state"><i class="fas fa-book-open"></i><h3>Nenhum artigo</h3></div>`;
-      return;
-    }
-
-    let html = '';
-    filtrados.forEach(art => {
-      const spotify = `https://open.spotify.com/search/${encodeURIComponent(art.titulo)}/podcasts`;
-      const youtube = `https://www.youtube.com/results?search_query=${encodeURIComponent(art.titulo)}`;
-      
-      html += `<div class="card" data-id="${art.id}">
-        <div class="card-meta"><span class="area-tag">${art.area}</span><span>${art.ano}</span></div>
-        <h3 class="card-title">${art.titulo}</h3>
-        <div class="card-authors">${art.autores}</div>
-        <div class="resenha-label"><i class="fas fa-robot"></i> RESENHA DEEPSEEK <span class="ia-badge">IA</span></div>
-        <div class="resenha-wrapper" id="wrapper-${art.id}">
-          <div class="resenha-text" id="resenha-${art.id}"><i class="fas fa-spinner fa-pulse"></i> Gerando...</div>
-          <div class="blur-overlay" id="blurOverlay-${art.id}" style="display: none;"></div>
+    <!-- ==================== RODAPÉ ==================== -->
+    <footer class="footer">
+        <div class="selo">
+            <strong>📚 COMO TRABALHAMOS:</strong> O Resenha & Podcasts <strong>NÃO</strong> armazena, distribui ou reproduz artigos científicos na íntegra. Nosso trabalho é exclusivamente de <strong>CURADORIA</strong>: lemos, analisamos e produzimos resenhas críticas sobre os artigos, sempre indicando a fonte original para consulta. Isso é uso aceitável (fair use) para fins de educação e crítica acadêmica.
         </div>
-        <div class="action-buttons">
-          <button class="podcast-btn" onclick="window.open('${spotify}','_blank')"><i class="fab fa-spotify"></i> Podcasts</button>
-          <button class="youtube-btn" onclick="window.open('${youtube}','_blank')"><i class="fab fa-youtube"></i> Vídeos</button>
-        </div>
-        <button class="btn-gerar" onclick="regenerateReview(${art.id})"><i class="fas fa-sync-alt"></i> Regenerar</button>
-      </div>`;
-    });
-    container.innerHTML = html;
+        <p>&copy; 2026 Resenha & Podcasts Acadêmicos. Todos os direitos reservados.</p>
+    </footer>
 
-    for (let art of filtrados) {
-      const el = document.getElementById(`resenha-${art.id}`);
-      const overlayDiv = document.getElementById(`blurOverlay-${art.id}`);
-      
-      try {
-        if (!art.resenha) art.resenha = await gerarResenhaComIA(art);
-        const textoCompleto = art.resenha;
-        
-        if (canAccessFullResenha()) {
-          el.textContent = textoCompleto;
-          el.classList.remove('blurred');
-          overlayDiv.style.display = 'none';
-          incrementUsage();
-        } else {
-          const preview = textoCompleto.substring(0, 150) + '...';
-          el.textContent = preview;
-          el.classList.add('blurred');
-          overlayDiv.style.display = 'block';
-          overlayDiv.innerHTML = `<button class="btn-unlock" onclick="showUpgradeModal()"><i class="fas fa-lock"></i> Desbloquear resenha completa</button>`;
+    <script>
+        // ========== DADOS DAS 8 GRANDES ÁREAS DO CNPq ==========
+        const grandesAreas = [
+            {
+                id: 1,
+                nome: "Ciências Exatas e da Terra",
+                icone: "🧮",
+                subareas: [
+                    "Matemática",
+                    "Probabilidade e Estatística",
+                    "Ciência da Computação",
+                    "Astronomia",
+                    "Física",
+                    "Química",
+                    "Geociências",
+                    "Oceanografia"
+                ]
+            },
+            {
+                id: 2,
+                nome: "Ciências Biológicas",
+                icone: "🧬",
+                subareas: [
+                    "Biologia Geral",
+                    "Genética",
+                    "Botânica",
+                    "Zoologia",
+                    "Ecologia",
+                    "Morfologia",
+                    "Fisiologia",
+                    "Bioquímica",
+                    "Biofísica",
+                    "Farmacologia",
+                    "Imunologia",
+                    "Microbiologia",
+                    "Parasitologia"
+                ]
+            },
+            {
+                id: 3,
+                nome: "Engenharias",
+                icone: "⚙️",
+                subareas: [
+                    "Engenharia Civil",
+                    "Engenharia Elétrica",
+                    "Engenharia Mecânica",
+                    "Engenharia Química",
+                    "Engenharia Sanitária",
+                    "Engenharia de Produção",
+                    "Engenharia de Transportes",
+                    "Engenharia Aeroespacial",
+                    "Engenharia Biomédica"
+                ]
+            },
+            {
+                id: 4,
+                nome: "Ciências da Saúde",
+                icone: "🏥",
+                subareas: [
+                    "Medicina",
+                    "Odontologia",
+                    "Farmácia",
+                    "Enfermagem",
+                    "Nutrição",
+                    "Saúde Coletiva",
+                    "Fonoaudiologia",
+                    "Fisioterapia",
+                    "Terapia Ocupacional",
+                    "Educação Física"
+                ]
+            },
+            {
+                id: 5,
+                nome: "Ciências Agrárias",
+                icone: "🌱",
+                subareas: [
+                    "Agronomia",
+                    "Recursos Florestais",
+                    "Engenharia Agrícola",
+                    "Zootecnia",
+                    "Medicina Veterinária",
+                    "Recursos Pesqueiros",
+                    "Ciência e Tecnologia de Alimentos"
+                ]
+            },
+            {
+                id: 6,
+                nome: "Ciências Sociais Aplicadas",
+                icone: "📊",
+                subareas: [
+                    "Direito",
+                    "Administração",
+                    "Economia",
+                    "Arquitetura e Urbanismo",
+                    "Planejamento Urbano e Regional",
+                    "Demografia",
+                    "Ciência da Informação",
+                    "Museologia",
+                    "Comunicação",
+                    "Serviço Social",
+                    "Economia Doméstica",
+                    "Turismo"
+                ]
+            },
+            {
+                id: 7,
+                nome: "Ciências Humanas",
+                icone: "🧠",
+                subareas: [
+                    "Filosofia",
+                    "Sociologia",
+                    "Antropologia",
+                    "Arqueologia",
+                    "História",
+                    "Geografia",
+                    "Psicologia",
+                    "Educação",
+                    "Ciência Política",
+                    "Teologia"
+                ]
+            },
+            {
+                id: 8,
+                nome: "Linguística, Letras e Artes",
+                icone: "🎭",
+                subareas: [
+                    "Linguística",
+                    "Letras",
+                    "Artes",
+                    "Música",
+                    "Dança",
+                    "Teatro",
+                    "Cinema",
+                    "Fotografia"
+                ]
+            }
+        ];
+
+        // ========== ARTIGOS MOCKADOS (distribuídos por subáreas) ==========
+        const artigosMock = [
+            { id: 1, titulo: "Attention Is All You Need", autores: "Vaswani et al.", ano: 2023, subarea: "Ciência da Computação", resenha: "O artigo que revolucionou a IA com a arquitetura Transformer. Essencial para entender LLMs como GPT e DeepSeek. Aplicações em NLP, visão computacional e biologia estrutural." },
+            { id: 2, titulo: "Sparks of AGI", autores: "Bubeck et al.", ano: 2023, subarea: "Ciência da Computação", resenha: "Análise polêmica do GPT-4 sugerindo 'faíscas de inteligência geral artificial'. Separa o hype da ciência real." },
+            { id: 3, titulo: "GLP-1 Agonists: Beyond Diabetes", autores: "Drucker & Holst", ano: 2024, subarea: "Medicina", resenha: "Ozempic/Wegovy mostram efeitos cardioprotetores e neuroprotetores. A grande virada farmacológica da década." },
+            { id: 4, titulo: "Lecanemab in Alzheimer's", autores: "van Dyck et al.", ano: 2022, subarea: "Medicina", resenha: "Anticorpo monoclonal com eficácia modesta contra Alzheimer. Vale a pena o risco de edema cerebral?" },
+            { id: 5, titulo: "Exceeding 1.5°C triggers tipping points", autores: "McKay et al.", ano: 2022, subarea: "Geociências", resenha: "Múltiplos pontos de não-retorno climáticos são possíveis mesmo com 1.5°C de aquecimento. Leitura dura, mas essencial." },
+            { id: 6, titulo: "What Is It Like to Be a LLM?", autores: "Chalmers", ano: 2023, subarea: "Filosofia", resenha: "O pai do 'Hard Problem of Consciousness' aplica sua navalha filosófica aos modelos de linguagem. Provocativo e necessário." },
+            { id: 7, titulo: "mRNA Vaccine Technology", autores: "Kariko & Weissman", ano: 2023, subarea: "Imunologia", resenha: "A plataforma de mRNA está sendo redirecionada para vacinas contra câncer. Aula sobre o futuro da imunologia." },
+            { id: 8, titulo: "The Global Plastic Treaty", autores: "Simon et al.", ano: 2025, subarea: "Ecologia", resenha: "Negociações da ONU para limitar produção de polímeros. Embate geopolítico entre países." }
+        ];
+
+        // ========== RENDERIZAÇÃO ==========
+        const areasGrid = document.getElementById('areasGrid');
+        const subareasContainer = document.getElementById('subareasContainer');
+        const subareasTitulo = document.getElementById('subareasTitulo');
+        const subareasGrid = document.getElementById('subareasGrid');
+        const destaqueSection = document.getElementById('destaqueSection');
+        const destaqueCards = document.getElementById('destaqueCards');
+
+        let areaAtiva = null;
+
+        function renderizarAreas() {
+            let html = '';
+            grandesAreas.forEach(area => {
+                html += `
+                    <div class="area-card" onclick="selecionarArea(${area.id})" id="area-${area.id}">
+                        <span class="area-numero">Área ${area.id}</span>
+                        <span class="area-icone">${area.icone}</span>
+                        <h3 class="area-nome">${area.nome}</h3>
+                        <span class="area-count">${area.subareas.length} subáreas</span>
+                    </div>
+                `;
+            });
+            areasGrid.innerHTML = html;
         }
-      } catch (e) {
-        el.textContent = "Erro ao gerar resenha.";
-      }
-    }
-    updateUsageUI();
-  }
 
-  window.regenerateReview = async function(id) {
-    const art = artigosMock.find(a => a.id === id);
-    if (!art) return;
-    const el = document.getElementById(`resenha-${id}`);
-    el.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Regenerando...';
-    art.resenha = await gerarResenhaComIA(art);
-    renderCards(currentArea);
-  };
+        function selecionarArea(id) {
+            // Remove classe ativa de todos
+            document.querySelectorAll('.area-card').forEach(c => c.classList.remove('ativa'));
 
-  // ========== MODAL ==========
-  const modal = document.getElementById('upgradeModal');
-  window.showUpgradeModal = () => modal.classList.add('active');
-  document.getElementById('closeModalBtn').onclick = () => modal.classList.remove('active');
-  document.getElementById('upgradeLink').onclick = showUpgradeModal;
-  
-  document.getElementById('simulatePaymentBtn').onclick = () => {
-    userTier = 'premium';
-    updateUsageUI();
-    modal.classList.remove('active');
-    renderCards(currentArea);
-    alert('✅ Assinatura Premium simulada! Agora você tem acesso ilimitado e sem blur.');
-  };
+            // Adiciona classe ativa no card selecionado
+            const card = document.getElementById(`area-${id}`);
+            if (card) card.classList.add('ativa');
 
-  // ========== FILTROS ==========
-  document.querySelectorAll('.area-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-      document.querySelectorAll('.area-btn').forEach(b => b.classList.remove('active'));
-      this.classList.add('active');
-      currentArea = this.dataset.area;
-      renderCards(currentArea);
-    });
-  });
+            const area = grandesAreas.find(a => a.id === id);
+            if (!area) return;
 
-  // Init
-  updateUsageUI();
-  renderCards('todos');
-</script>
+            areaAtiva = area;
+
+            // Renderiza subáreas
+            subareasTitulo.textContent = `📂 ${area.nome} — Subáreas`;
+            let htmlSub = '';
+            area.subareas.forEach(sub => {
+                const count = artigosMock.filter(a => a.subarea === sub).length;
+                htmlSub += `
+                    <div class="subarea-card" onclick="filtrarArtigos('${sub}')">
+                        <span class="subarea-icone">📄</span>
+                        <div>
+                            <span class="subarea-nome">${sub}</span>
+                            ${count > 0 ? `<br><small style="color:var(--text-secondary);">${count} artigo(s)</small>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            subareasGrid.innerHTML = htmlSub;
+            subareasContainer.classList.add('visivel');
+
+            // Esconde artigos anteriores
+            destaqueSection.classList.remove('visivel');
+        }
+
+        function fecharSubareas() {
+            subareasContainer.classList.remove('visivel');
+            destaqueSection.classList.remove('visivel');
+            document.querySelectorAll('.area-card').forEach(c => c.classList.remove('ativa'));
+            areaAtiva = null;
+        }
+
+        function filtrarArtigos(subarea) {
+            const artigos = artigosMock.filter(a => a.subarea === subarea);
+            if (artigos.length === 0) {
+                destaqueCards.innerHTML = '<p style="text-align:center;color:var(--text-secondary);">Nenhum artigo nesta subárea ainda. Em breve!</p>';
+            } else {
+                let html = '';
+                artigos.forEach(art => {
+                    const spotify = `https://open.spotify.com/search/${encodeURIComponent(art.titulo)}/podcasts`;
+                    const youtube = `https://www.youtube.com/results?search_query=${encodeURIComponent(art.titulo)}`;
+                    html += `
+                        <div class="card">
+                            <h4 class="card-titulo">${art.titulo}</h4>
+                            <p class="card-autores">${art.autores} · ${art.ano}</p>
+                            <p class="card-resenha">${art.resenha || 'Resenha em breve.'}</p>
+                            <div class="card-botoes">
+                                <button class="btn-podcast" onclick="window.open('${spotify}','_blank')"><i class="fab fa-spotify"></i> Podcasts</button>
+                                <button class="btn-video" onclick="window.open('${youtube}','_blank')"><i class="fab fa-youtube"></i> Vídeos</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                destaqueCards.innerHTML = html;
+            }
+            destaqueSection.classList.add('visivel');
+            // Scroll suave para a seção
+            destaqueSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Inicializa
+        renderizarAreas();
+    </script>
+
 </body>
 </html>
