@@ -1,0 +1,340 @@
+ <!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resenha & Podcasts · Premium</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background-color: #f5f7fa; font-family: 'Inter', sans-serif; color: #1e293b; line-height: 1.6; padding: 2rem 1.5rem; }
+    .container { max-width: 1400px; margin: 0 auto; }
+    
+    /* Navegação entre abas */
+    .nav-tabs { display: flex; justify-content: center; gap: 2rem; margin-bottom: 2rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 1rem; }
+    .nav-tab { font-family: 'Libre Baskerville', serif; font-size: 1.2rem; color: #64748b; cursor: pointer; padding: 0.5rem 1rem; transition: all 0.2s; border-bottom: 3px solid transparent; }
+    .nav-tab:hover { color: #0f172a; }
+    .nav-tab.active { color: #0f172a; border-bottom-color: #0f172a; font-weight: 600; }
+    .nav-tab i { margin-right: 8px; }
+    
+    .header { text-align: center; margin-bottom: 3rem; border-bottom: 2px solid #0f172a; padding-bottom: 1.5rem; }
+    h1 { font-family: 'Libre Baskerville', serif; font-size: 3.2rem; font-weight: 700; color: #0f172a; margin-bottom: 0.5rem; }
+    .subhead { font-family: 'Libre Baskerville', serif; font-style: italic; font-size: 1.2rem; color: #475569; margin-bottom: 1.8rem; }
+    
+    .plan-indicator { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 1.5rem; }
+    .plan-badge { background: #f1f5f9; padding: 8px 20px; border-radius: 40px; font-size: 0.9rem; font-weight: 500; border: 1px solid #e2e8f0; }
+    .plan-badge i { margin-right: 8px; }
+    .plan-badge.free { background: #fff; color: #0f172a; }
+    .plan-badge.premium { background: #fbbf24; color: #0f172a; border-color: #f59e0b; }
+    .usage-text { font-size: 0.9rem; color: #64748b; }
+    .upgrade-link { color: #8b5cf6; font-weight: 600; cursor: pointer; text-decoration: underline; margin-left: 10px; }
+    
+    .area-selector { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.75rem; margin-top: 1rem; }
+    .area-btn { background: transparent; border: 1.5px solid #cbd5e1; color: #334155; font-family: 'Inter', sans-serif; font-weight: 500; font-size: 1rem; padding: 0.7rem 1.8rem; border-radius: 40px; cursor: pointer; transition: all 0.25s ease; }
+    .area-btn:hover { border-color: #1e293b; background-color: #f8fafc; }
+    .area-btn.active { background-color: #0f172a; border-color: #0f172a; color: white; }
+    
+    .results-info { margin: 2rem 0 1.5rem; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 1px; color: #64748b; border-left: 4px solid #0f172a; padding-left: 1rem; }
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 2rem; }
+    
+    .card { background: white; border-radius: 18px; padding: 1.8rem; box-shadow: 0 15px 30px -12px rgba(0, 0, 0, 0.05); border: 1px solid #e2e8f0; transition: all 0.3s; display: flex; flex-direction: column; }
+    .card:hover { transform: translateY(-6px); box-shadow: 0 25px 40px -16px rgba(15, 23, 42, 0.12); }
+    .card-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; font-size: 0.85rem; font-weight: 500; color: #64748b; }
+    .area-tag { background: #eef2ff; color: #1e293b; padding: 0.2rem 0.9rem; border-radius: 30px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
+    .card-title { font-family: 'Libre Baskerville', serif; font-size: 1.5rem; font-weight: 700; line-height: 1.3; margin-bottom: 0.8rem; color: #0f172a; }
+    .card-authors { font-size: 0.9rem; color: #475569; margin-bottom: 1.2rem; font-style: italic; }
+    
+    .resenha-label { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #94a3b8; margin-bottom: 0.3rem; display: flex; align-items: center; gap: 8px; }
+    .ia-badge { background: #8b5cf6; color: white; padding: 2px 8px; border-radius: 20px; font-size: 0.65rem; }
+    
+    .resenha-wrapper { position: relative; flex-grow: 1; margin-bottom: 1.5rem; }
+    .resenha-text { font-size: 0.95rem; color: #1e293b; line-height: 1.6; border-left: 2px solid #e2e8f0; padding-left: 1rem; min-height: 120px; }
+    
+    .resenha-text.blurred { position: relative; max-height: 80px; overflow: hidden; }
+    .resenha-text.blurred::after { content: ""; position: absolute; bottom: 0; left: 0; right: 0; height: 50px; background: linear-gradient(to bottom, transparent, white); pointer-events: none; }
+    .blur-overlay { margin-top: -20px; margin-bottom: 15px; text-align: center; position: relative; z-index: 2; }
+    .btn-unlock { background: #fbbf24; border: none; color: #0f172a; font-weight: 600; padding: 8px 18px; border-radius: 40px; font-size: 0.85rem; cursor: pointer; border: 1px solid #f59e0b; transition: all 0.2s; box-shadow: 0 4px 10px rgba(251, 191, 36, 0.2); }
+    .btn-unlock:hover { background: #f59e0b; transform: scale(1.02); }
+    .btn-unlock i { margin-right: 6px; }
+    
+    .action-buttons { display: flex; gap: 10px; margin-top: auto; }
+    .podcast-btn, .youtube-btn { flex: 1; padding: 0.8rem; border-radius: 50px; font-weight: 500; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; border: none; }
+    .podcast-btn { background: #1DB954; color: white; }
+    .podcast-btn:hover { background: #1ed760; transform: translateY(-2px); }
+    .youtube-btn { background: #FF0000; color: white; }
+    .youtube-btn:hover { background: #cc0000; transform: translateY(-2px); }
+    .btn-gerar { background: #f1f5f9; border: 1px solid #e2e8f0; color: #0f172a; padding: 0.5rem 1rem; border-radius: 30px; font-size: 0.8rem; cursor: pointer; margin-top: 10px; width: 100%; }
+    
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 1000; visibility: hidden; opacity: 0; transition: all 0.2s; }
+    .modal-overlay.active { visibility: visible; opacity: 1; }
+    .modal { background: white; max-width: 450px; width: 90%; border-radius: 32px; padding: 2rem; box-shadow: 0 30px 60px rgba(0,0,0,0.2); text-align: center; }
+    .modal h2 { font-family: 'Libre Baskerville', serif; font-size: 2rem; margin-bottom: 0.5rem; }
+    .modal .price { font-size: 2.5rem; font-weight: 700; color: #0f172a; margin: 1rem 0; }
+    .modal .price small { font-size: 1rem; font-weight: 400; color: #64748b; }
+    .modal ul { text-align: left; margin: 1.5rem 0; list-style: none; }
+    .modal li { margin-bottom: 10px; }
+    .modal li i { color: #10b981; margin-right: 10px; }
+    .btn-primary { background: #0f172a; color: white; border: none; padding: 1rem 2rem; border-radius: 60px; font-weight: 600; font-size: 1.1rem; width: 100%; cursor: pointer; transition: all 0.2s; }
+    .btn-primary:hover { background: #1e293b; transform: scale(1.02); }
+    .modal-close { margin-top: 1rem; color: #94a3b8; text-decoration: underline; cursor: pointer; font-size: 0.9rem; }
+    
+    .footer { margin-top: 5rem; text-align: center; font-size: 0.85rem; color: #94a3b8; border-top: 1px solid #e2e8f0; padding-top: 2rem; }
+    .empty-state { grid-column: 1 / -1; text-align: center; padding: 4rem; background: white; border-radius: 24px; color: #64748b; }
+    
+    @media (max-width: 600px) {
+      body { padding: 1.2rem; }
+      h1 { font-size: 2.4rem; }
+      .cards-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <!-- Navegação entre Abas -->
+  <div class="nav-tabs">
+    <div class="nav-tab active"><i class="fas fa-newspaper"></i> Resenhas</div>
+    <div class="nav-tab" onclick="window.location.href='cafe-e-carreira.html'"><i class="fas fa-mug-hot"></i> Café & Carreira</div>
+    <div class="nav-tab" onclick="alert('Em breve!')"><i class="fas fa-user"></i> Minha Conta</div>
+  </div>
+
+  <header class="header">
+    <h1>Resenha & Podcasts</h1>
+    <div class="subhead">Curadoria crítica · DeepSeek IA · Premium</div>
+    
+    <div class="plan-indicator">
+      <span class="plan-badge free" id="planBadge"><i class="fas fa-user"></i> Plano Gratuito</span>
+      <span class="usage-text" id="usageDisplay">0/10 resenhas este mês</span>
+      <span class="upgrade-link" id="upgradeLink"><i class="fas fa-crown"></i> Assinar Premium</span>
+    </div>
+
+    <div class="area-selector">
+      <button class="area-btn active" data-area="todos">Todos</button>
+      <button class="area-btn" data-area="Inteligência Artificial">IA</button>
+      <button class="area-btn" data-area="Medicina">Medicina</button>
+      <button class="area-btn" data-area="Mudanças Climáticas">Clima</button>
+      <button class="area-btn" data-area="Filosofia">Filosofia</button>
+    </div>
+  </header>
+
+  <div class="results-info"><span id="resultsCount">6</span> artigos essenciais</div>
+  <div id="cardsContainer" class="cards-grid"></div>
+  <footer class="footer">Resenhas via DeepSeek · © 2026</footer>
+</div>
+
+<div class="modal-overlay" id="upgradeModal">
+  <div class="modal">
+    <i class="fas fa-crown" style="font-size: 3rem; color: #fbbf24;"></i>
+    <h2>Resenha Premium</h2>
+    <p style="color: #64748b;">Acesso ilimitado a resenhas completas</p>
+    <div class="price">R$ 19,90 <small>/mês</small></div>
+    <ul>
+      <li><i class="fas fa-check-circle"></i> Resenhas de <strong>400+ caracteres</strong></li>
+      <li><i class="fas fa-check-circle"></i> Análise crítica completa (sem blur)</li>
+      <li><i class="fas fa-check-circle"></i> Acesso ilimitado (sem limite de 10/mês)</li>
+      <li><i class="fas fa-check-circle"></i> Sugestões de podcasts e vídeos</li>
+    </ul>
+    <button class="btn-primary" id="simulatePaymentBtn"><i class="fas fa-lock-open"></i> Assinar Agora (Simular)</button>
+    <div class="modal-close" id="closeModalBtn">Talvez mais tarde</div>
+  </div>
+</div>
+
+<script>
+  // ========== CONFIGURAÇÃO ==========
+  // ⚠️ ATENÇÃO: Para produção, use o Cloudflare Worker. Esta chave é apenas para teste local
+  
+  
+  // ========== SIMULAÇÃO DE USUÁRIO ==========
+  let userTier = 'free';
+  let monthlyUsage = parseInt(localStorage.getItem('monthlyUsage')) || 0;
+  const currentMonth = new Date().getMonth() + '-' + new Date().getFullYear();
+  const storedMonth = localStorage.getItem('usageMonth');
+  
+  if (storedMonth !== currentMonth) {
+    monthlyUsage = 0;
+    localStorage.setItem('usageMonth', currentMonth);
+  }
+  
+  function updateUsageUI() {
+    document.getElementById('usageDisplay').textContent = `${monthlyUsage}/10 resenhas este mês`;
+    const badge = document.getElementById('planBadge');
+    if (userTier === 'premium') {
+      badge.className = 'plan-badge premium';
+      badge.innerHTML = '<i class="fas fa-crown"></i> Premium Ilimitado';
+    } else {
+      badge.className = 'plan-badge free';
+      badge.innerHTML = '<i class="fas fa-user"></i> Plano Gratuito';
+    }
+  }
+  
+  function incrementUsage() {
+    if (userTier === 'free') {
+      monthlyUsage++;
+      localStorage.setItem('monthlyUsage', monthlyUsage);
+      updateUsageUI();
+    }
+  }
+  
+  function canAccessFullResenha() {
+    return userTier === 'premium' || monthlyUsage < 10;
+  }
+  
+  // ========== ARTIGOS MOCKADOS ==========
+  const artigosMock = [
+    { id: 1, titulo: "Attention Is All You Need", autores: "Vaswani et al.", ano: 2023, area: "Inteligência Artificial", abstract: "The dominant sequence transduction models are based on complex recurrent or convolutional neural networks. We propose the Transformer, based solely on attention mechanisms.", resenha: null },
+    { id: 2, titulo: "GLP-1 Agonists: Beyond Diabetes", autores: "Drucker & Holst", ano: 2024, area: "Medicina", abstract: "GLP-1 receptor agonists show cardioprotective and neuroprotective effects beyond glycemic control and weight loss.", resenha: null },
+    { id: 3, titulo: "Exceeding 1.5°C triggers tipping points", autores: "McKay et al., Science", ano: 2022, area: "Mudanças Climáticas", abstract: "At 1.5°C warming, multiple climate tipping points become possible, including Greenland ice sheet collapse.", resenha: null },
+    { id: 4, titulo: "What Is It Like to Be a LLM?", autores: "Chalmers", ano: 2023, area: "Filosofia", abstract: "Applying the hard problem of consciousness to large language models.", resenha: null },
+    { id: 5, titulo: "Sparks of AGI", autores: "Bubeck et al.", ano: 2023, area: "Inteligência Artificial", abstract: "GPT-4 shows remarkable capabilities suggesting sparks of artificial general intelligence.", resenha: null },
+    { id: 6, titulo: "Lecanemab in Alzheimer's", autores: "van Dyck et al.", ano: 2022, area: "Medicina", abstract: "Lecanemab reduced amyloid and moderately lessened cognitive decline.", resenha: null }
+  ];
+
+  // ========== IA: RESENHA ROBUSTA (400+ CARACTERES) ==========
+  // ========== IA: RESENHA ROBUSTA VIA WORKER (SEGURO) ==========
+  // Substitua pela URL real do seu Cloudflare Worker
+  const WORKER_URL = "https://proxy-openrouter.wesleyribeir0236666.workers.dev";
+  
+  async function gerarResenhaComIA(artigo) {
+    const prompt = `Você é um curador acadêmico sênior. Escreva uma resenha crítica ROBUSTA em português (NO MÍNIMO 400 CARACTERES).
+    
+ESTRUTURA:
+1. CONTEXTO: Relevância atual.
+2. TESE CENTRAL: Principal descoberta.
+3. ANÁLISE CRÍTICA: Limitação ou implicação polêmica.
+4. PARA QUEM: Perfil do leitor.
+
+Título: ${artigo.titulo}
+Autores: ${artigo.autores}
+Área: ${artigo.area}
+Abstract: ${artigo.abstract || "Não disponível"}`;
+
+    try {
+      const resposta = await fetch(WORKER_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: [{ role: "user", content: prompt }],
+          max_tokens: 800
+        })
+      });
+
+      const data = await resposta.json();
+      
+      if (data.error) {
+        console.error("Erro do Worker:", data);
+        return `⚠️ Erro: ${data.details || data.error}`;
+      }
+      
+      return data.choices[0].message.content.trim();
+      
+    } catch (error) {
+      console.error("Erro de conexão:", error);
+      return "⚠️ Erro de conexão. Verifique sua internet.";
+    }
+  }
+
+  // ========== RENDERIZAÇÃO COM BLUR ==========
+  const container = document.getElementById('cardsContainer');
+  const resultsSpan = document.getElementById('resultsCount');
+  let currentArea = 'todos';
+
+  async function renderCards(areaFiltro) {
+    let filtrados = areaFiltro === 'todos' ? [...artigosMock] : artigosMock.filter(a => a.area === areaFiltro);
+    resultsSpan.textContent = filtrados.length;
+    
+    if (filtrados.length === 0) {
+      container.innerHTML = `<div class="empty-state"><i class="fas fa-book-open"></i><h3>Nenhum artigo</h3></div>`;
+      return;
+    }
+
+    let html = '';
+    filtrados.forEach(art => {
+      const spotify = `https://open.spotify.com/search/${encodeURIComponent(art.titulo)}/podcasts`;
+      const youtube = `https://www.youtube.com/results?search_query=${encodeURIComponent(art.titulo)}`;
+      
+      html += `<div class="card" data-id="${art.id}">
+        <div class="card-meta"><span class="area-tag">${art.area}</span><span>${art.ano}</span></div>
+        <h3 class="card-title">${art.titulo}</h3>
+        <div class="card-authors">${art.autores}</div>
+        <div class="resenha-label"><i class="fas fa-robot"></i> RESENHA DEEPSEEK <span class="ia-badge">IA</span></div>
+        <div class="resenha-wrapper" id="wrapper-${art.id}">
+          <div class="resenha-text" id="resenha-${art.id}"><i class="fas fa-spinner fa-pulse"></i> Gerando...</div>
+          <div class="blur-overlay" id="blurOverlay-${art.id}" style="display: none;"></div>
+        </div>
+        <div class="action-buttons">
+          <button class="podcast-btn" onclick="window.open('${spotify}','_blank')"><i class="fab fa-spotify"></i> Podcasts</button>
+          <button class="youtube-btn" onclick="window.open('${youtube}','_blank')"><i class="fab fa-youtube"></i> Vídeos</button>
+        </div>
+        <button class="btn-gerar" onclick="regenerateReview(${art.id})"><i class="fas fa-sync-alt"></i> Regenerar</button>
+      </div>`;
+    });
+    container.innerHTML = html;
+
+    for (let art of filtrados) {
+      const el = document.getElementById(`resenha-${art.id}`);
+      const overlayDiv = document.getElementById(`blurOverlay-${art.id}`);
+      
+      try {
+        if (!art.resenha) art.resenha = await gerarResenhaComIA(art);
+        const textoCompleto = art.resenha;
+        
+        if (canAccessFullResenha()) {
+          el.textContent = textoCompleto;
+          el.classList.remove('blurred');
+          overlayDiv.style.display = 'none';
+          incrementUsage();
+        } else {
+          const preview = textoCompleto.substring(0, 150) + '...';
+          el.textContent = preview;
+          el.classList.add('blurred');
+          overlayDiv.style.display = 'block';
+          overlayDiv.innerHTML = `<button class="btn-unlock" onclick="showUpgradeModal()"><i class="fas fa-lock"></i> Desbloquear resenha completa</button>`;
+        }
+      } catch (e) {
+        el.textContent = "Erro ao gerar resenha.";
+      }
+    }
+    updateUsageUI();
+  }
+
+  window.regenerateReview = async function(id) {
+    const art = artigosMock.find(a => a.id === id);
+    if (!art) return;
+    const el = document.getElementById(`resenha-${id}`);
+    el.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Regenerando...';
+    art.resenha = await gerarResenhaComIA(art);
+    renderCards(currentArea);
+  };
+
+  // ========== MODAL ==========
+  const modal = document.getElementById('upgradeModal');
+  window.showUpgradeModal = () => modal.classList.add('active');
+  document.getElementById('closeModalBtn').onclick = () => modal.classList.remove('active');
+  document.getElementById('upgradeLink').onclick = showUpgradeModal;
+  
+  document.getElementById('simulatePaymentBtn').onclick = () => {
+    userTier = 'premium';
+    updateUsageUI();
+    modal.classList.remove('active');
+    renderCards(currentArea);
+    alert('✅ Assinatura Premium simulada! Agora você tem acesso ilimitado e sem blur.');
+  };
+
+  // ========== FILTROS ==========
+  document.querySelectorAll('.area-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.area-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      currentArea = this.dataset.area;
+      renderCards(currentArea);
+    });
+  });
+
+  // Init
+  updateUsageUI();
+  renderCards('todos');
+</script>
+</body>
+</html>
