@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resenha & Podcasts Acadêmicos</title>
 
-    <!-- Fontes: Playfair Display (títulos) + Inter (corpo) -->
+    <!-- Google Fonts: Playfair Display + Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Font Awesome 6 (ícones outline) -->
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <style>
@@ -34,8 +34,6 @@
             --verde-spotify-hover: #1ed760;
             --dourado: #F59E0B;
             --dourado-hover: #D97706;
-            --skeleton-base: #E5E7EB;
-            --skeleton-shine: #F3F4F6;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -48,7 +46,6 @@
             -webkit-font-smoothing: antialiased;
             min-height: 100vh;
             transition: background-color 0.5s ease;
-            overflow-x: hidden;
         }
 
         /* ========== NAVEGAÇÃO ========== */
@@ -56,7 +53,7 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            background: rgba(249, 250, 251, 0.85);
+            background: rgba(249,250,251,0.85);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border);
@@ -82,7 +79,6 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            letter-spacing: -0.3px;
         }
 
         .nav-links {
@@ -96,9 +92,8 @@
             font-weight: 500;
             color: var(--text-secondary);
             text-decoration: none;
-            transition: color 0.15s;
             cursor: pointer;
-            letter-spacing: -0.2px;
+            transition: color 0.15s;
         }
 
         .nav-links a:hover { color: var(--text-primary); }
@@ -107,12 +102,10 @@
         .main-content {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 2.5rem 1.5rem 4rem;
-            transition: all 0.5s ease;
-            min-height: 80vh;
+            padding: 2.5rem 1.5rem;
         }
 
-        /* ========== ESTADO INICIAL - SELETOR DE ÁREAS ========== */
+        /* ========== SELETOR DE ÁREAS ========== */
         .area-selector-container {
             text-align: center;
             margin-top: 2rem;
@@ -123,14 +116,12 @@
             font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
-            letter-spacing: -0.5px;
             color: var(--text-primary);
         }
 
         .area-selector-subtitle {
             color: var(--text-secondary);
             margin-bottom: 2.5rem;
-            font-size: 1.05rem;
         }
 
         .area-icons-row {
@@ -138,7 +129,6 @@
             justify-content: center;
             gap: 1rem;
             flex-wrap: wrap;
-            margin-bottom: 2rem;
         }
 
         .area-icon-btn {
@@ -155,8 +145,6 @@
             justify-content: center;
             gap: 0.4rem;
             transition: all var(--transition);
-            position: relative;
-            font-family: 'Inter', sans-serif;
             color: var(--text-primary);
         }
 
@@ -166,27 +154,8 @@
             border-color: var(--border-hover);
         }
 
-        .area-icon-btn:active {
-            transform: scale(0.96);
-            opacity: 0.9;
-        }
-
-        .area-icon-btn .area-emoji {
-            font-size: 2rem;
-            transition: transform 0.3s ease;
-        }
-
-        .area-icon-btn:hover .area-emoji {
-            transform: scale(1.1);
-        }
-
-        .area-icon-btn .area-label {
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-align: center;
-            line-height: 1.2;
-            color: var(--text-secondary);
-        }
+        .area-icon-btn .area-emoji { font-size: 2rem; }
+        .area-icon-btn .area-label { font-size: 0.7rem; font-weight: 600; color: var(--text-secondary); }
 
         /* ========== INDICADOR DE ÁREA ATIVA ========== */
         .area-active-indicator {
@@ -215,7 +184,6 @@
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
-            box-shadow: var(--shadow-sm);
         }
 
         .area-active-nome {
@@ -225,25 +193,17 @@
         }
 
         .btn-fechar-area {
-            background: transparent;
+            background: none;
             border: none;
             color: var(--text-tertiary);
             cursor: pointer;
             font-size: 1.3rem;
-            padding: 0.5rem;
             margin-left: auto;
-            transition: color 0.2s, transform 0.2s;
-            border-radius: 50%;
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            transition: all 0.2s;
         }
 
         .btn-fechar-area:hover {
             color: var(--text-primary);
-            background: var(--bg);
             transform: rotate(90deg);
         }
 
@@ -251,14 +211,12 @@
         .subareas-container {
             display: none;
             opacity: 0;
-            transform: translateY(8px);
-            transition: all 0.4s ease;
+            transition: opacity 0.4s ease;
         }
 
         .subareas-container.visible {
             display: block;
             opacity: 1;
-            transform: translateY(0);
         }
 
         .subareas-grid {
@@ -271,19 +229,17 @@
         .subarea-card {
             background: var(--card-bg);
             border-radius: var(--radius-sm);
-            padding: 1.25rem 1rem;
+            padding: 1.25rem;
             cursor: pointer;
             border: 1px solid var(--border);
             box-shadow: var(--shadow-sm);
-            transition: all var(--transition);
-            text-decoration: none;
-            color: var(--text-primary);
             display: flex;
             align-items: center;
             gap: 0.75rem;
+            transition: all var(--transition);
+            animation: fadeInUp 0.35s forwards;
             opacity: 0;
             transform: translateY(10px);
-            animation: fadeInUp 0.35s forwards;
         }
 
         @keyframes fadeInUp {
@@ -291,43 +247,16 @@
         }
 
         .subarea-card:hover {
-            transform: translateY(-2px) !important;
+            transform: translateY(-2px);
             box-shadow: var(--shadow-md);
             border-color: var(--roxo);
         }
 
-        .subarea-card:active {
-            transform: scale(0.97) !important;
-        }
+        .subarea-icone { font-size: 1.4rem; }
+        .subarea-nome { font-weight: 600; font-size: 0.9rem; }
+        .subarea-count { font-size: 0.7rem; color: var(--text-tertiary); }
 
-        .subarea-icone {
-            font-size: 1.4rem;
-        }
-
-        .subarea-nome {
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: var(--text-primary);
-        }
-
-        .subarea-count {
-            font-size: 0.7rem;
-            color: var(--text-tertiary);
-        }
-
-        /* ========== ARTIGOS EM DESTAQUE ========== */
-        .destaque-section {
-            margin-top: 2rem;
-            display: none;
-            animation: fadeIn 0.4s ease;
-        }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        .destaque-section.visible {
-            display: block;
-        }
-
+        /* ========== CARDS DE ARTIGOS ========== */
         .cards-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -348,7 +277,6 @@
         .card:hover {
             transform: translateY(-3px);
             box-shadow: var(--shadow-lg);
-            border-color: var(--border-hover);
         }
 
         .card-titulo {
@@ -356,28 +284,12 @@
             font-size: 1.2rem;
             font-weight: 700;
             margin-bottom: 0.35rem;
-            line-height: 1.35;
         }
 
         .card-autores {
             font-size: 0.8rem;
             color: var(--text-secondary);
             margin-bottom: 0.75rem;
-        }
-
-        /* Skeleton Loader para resenha */
-        .skeleton-line {
-            height: 0.85rem;
-            border-radius: 6px;
-            background: linear-gradient(90deg, var(--skeleton-base) 25%, var(--skeleton-shine) 50%, var(--skeleton-base) 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-            margin-bottom: 0.6rem;
-        }
-
-        @keyframes shimmer {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
         }
 
         .card-resenha {
@@ -402,7 +314,6 @@
             right: 0;
             height: 35px;
             background: linear-gradient(to bottom, transparent, var(--card-bg));
-            pointer-events: none;
         }
 
         .blur-overlay {
@@ -419,18 +330,15 @@
             border-radius: 40px;
             font-size: 0.85rem;
             cursor: pointer;
-            border: 1px solid var(--dourado);
-            transition: all 0.2s;
-            box-shadow: 0 4px 10px rgba(245,158,11,0.15);
             display: inline-flex;
             align-items: center;
             gap: 0.4rem;
+            transition: all 0.2s;
         }
 
         .btn-unlock:hover {
             background: var(--dourado-hover);
             transform: translateY(-1px);
-            box-shadow: 0 6px 14px rgba(245,158,11,0.25);
         }
 
         .card-botoes {
@@ -452,13 +360,13 @@
             justify-content: center;
             gap: 0.4rem;
             transition: all 0.2s;
-            font-family: 'Inter', sans-serif;
         }
 
         .btn-podcast {
             background: var(--verde-spotify);
             color: white;
         }
+
         .btn-podcast:hover {
             background: var(--verde-spotify-hover);
             transform: translateY(-1px);
@@ -469,6 +377,7 @@
             background: #EF4444;
             color: white;
         }
+
         .btn-video:hover {
             background: #DC2626;
             transform: translateY(-1px);
@@ -485,7 +394,6 @@
             cursor: pointer;
             margin-top: 0.8rem;
             transition: all 0.2s;
-            align-self: flex-start;
         }
 
         .btn-regenerar:hover {
@@ -497,8 +405,8 @@
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(17, 24, 39, 0.6);
-            backdrop-filter: blur(6px);
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(4px);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -515,18 +423,12 @@
 
         .modal {
             background: var(--card-bg);
-            max-width: 420px;
+            max-width: 400px;
             width: 90%;
-            border-radius: 28px;
-            padding: 2.2rem;
-            box-shadow: 0 30px 50px rgba(0,0,0,0.15);
+            border-radius: 24px;
+            padding: 2rem;
             text-align: center;
-            transform: scale(0.9);
-            transition: transform 0.25s;
-        }
-
-        .modal-overlay.active .modal {
-            transform: scale(1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
 
         .modal h2 {
@@ -536,9 +438,8 @@
         }
 
         .modal .price {
-            font-size: 2.4rem;
+            font-size: 2.2rem;
             font-weight: 700;
-            color: var(--text-primary);
             margin: 1rem 0;
         }
 
@@ -584,12 +485,9 @@
             box-shadow: 0 8px 20px rgba(139,92,246,0.3);
         }
 
-        .btn-primary:active {
-            transform: scale(0.97);
-        }
-
         .modal-close {
-            margin-top: 1.2rem;
+            display: block;
+            margin-top: 1rem;
             color: var(--text-tertiary);
             cursor: pointer;
             font-size: 0.85rem;
@@ -606,15 +504,6 @@
             background: var(--card-bg);
         }
 
-        .footer .selo {
-            max-width: 700px;
-            margin: 0 auto 1rem;
-            font-size: 0.75rem;
-            line-height: 1.6;
-            color: var(--text-secondary);
-        }
-
-        /* ========== RESPONSIVO ========== */
         @media (max-width: 768px) {
             .area-selector-title { font-size: 1.8rem; }
             .area-icons-row { gap: 0.6rem; }
@@ -627,7 +516,6 @@
 </head>
 <body>
 
-    <!-- ==================== NAVEGAÇÃO ==================== -->
     <nav class="nav" id="mainNav">
         <div class="nav-inner">
             <a href="index.html" class="nav-logo">☕ Resenha & Podcasts</a>
@@ -639,46 +527,40 @@
         </div>
     </nav>
 
-    <!-- ==================== CONTEÚDO PRINCIPAL ==================== -->
     <main class="main-content" id="mainContent">
-        <!-- Estado Inicial: Seletor de Áreas -->
         <div class="area-selector-container" id="areaSelector">
             <h1 class="area-selector-title">Explore pelas grandes áreas do conhecimento</h1>
             <p class="area-selector-subtitle">Selecione uma área para descobrir artigos e subáreas.</p>
             <div class="area-icons-row" id="areaIconsRow"></div>
         </div>
 
-        <!-- Indicador de Área Ativa -->
         <div class="area-active-indicator" id="areaActiveIndicator">
             <div class="area-active-icon" id="areaActiveIcon"></div>
             <span class="area-active-nome" id="areaActiveNome"></span>
             <button class="btn-fechar-area" onclick="voltarParaSeletor()">✕</button>
         </div>
 
-        <!-- Subáreas -->
         <div class="subareas-container" id="subareasContainer">
             <h2 style="font-family:'Playfair Display',serif; font-weight:600; margin-bottom:1rem;">Subáreas</h2>
             <div class="subareas-grid" id="subareasGrid"></div>
         </div>
 
-        <!-- Artigos em Destaque -->
         <section class="destaque-section" id="destaqueSection">
             <h2 style="font-family:'Playfair Display',serif; font-weight:600; margin-bottom:1rem;">Artigos em Destaque</h2>
             <div class="cards-grid" id="destaqueCards"></div>
         </section>
     </main>
 
-    <!-- ==================== MODAL PREMIUM ==================== -->
     <div class="modal-overlay" id="upgradeModal">
         <div class="modal">
             <i class="fas fa-crown" style="font-size: 2.5rem; color: var(--dourado);"></i>
             <h2>Resenha Premium</h2>
-            <p style="color: var(--text-secondary);">Acesso ilimitado a resenhas completas e aprofundadas.</p>
+            <p style="color: var(--text-secondary);">Acesso ilimitado a análises completas</p>
             <div class="price">R$ 19,90 <small>/mês</small></div>
             <ul>
                 <li><i class="fas fa-check-circle"></i> Resenhas de <strong>400+ caracteres</strong></li>
-                <li><i class="fas fa-check-circle"></i> Análise crítica completa (sem blur)</li>
-                <li><i class="fas fa-check-circle"></i> Acesso ilimitado (sem limite de 10/mês)</li>
+                <li><i class="fas fa-check-circle"></i> Análise crítica sem blur</li>
+                <li><i class="fas fa-check-circle"></i> Acesso ilimitado</li>
                 <li><i class="fas fa-check-circle"></i> Conexão com podcasts e vídeos</li>
             </ul>
             <button class="btn-primary" id="simulatePaymentBtn"><i class="fas fa-lock-open"></i> Assinar Agora (Simular)</button>
@@ -686,56 +568,31 @@
         </div>
     </div>
 
-    <!-- ==================== RODAPÉ ==================== -->
     <footer class="footer">
-        <div class="selo">
-            <strong>📚 COMO TRABALHAMOS:</strong> O Resenha & Podcasts <strong>NÃO</strong> armazena, distribui ou reproduz artigos científicos na íntegra. Nosso trabalho é exclusivamente de <strong>CURADORIA</strong>: lemos, analisamos e produzimos resenhas críticas sobre os artigos, sempre indicando a fonte original para consulta. Isso é uso aceitável (fair use) para fins de educação e crítica acadêmica.
+        <div style="max-width:700px; margin:0 auto 1rem; font-size:0.75rem; color:var(--text-secondary);">
+            <strong>📚 COMO TRABALHAMOS:</strong> O Resenha & Podcasts <strong>NÃO</strong> armazena, distribui ou reproduz artigos científicos na íntegra. Nosso trabalho é exclusivamente de <strong>CURADORIA</strong>: lemos, analisamos e produzimos resenhas críticas, sempre indicando a fonte original.
         </div>
-        <p>&copy; 2026 Resenha & Podcasts Acadêmicos. Todos os direitos reservados.</p>
+        <p>&copy; 2026 Resenha & Podcasts Acadêmicos.</p>
     </footer>
 
     <script>
-        // ========== CONFIGURAÇÃO DO WORKER (RESENHAS COM IA) ==========
-        const WORKER_URL = "https://crimson-hall-565c.wy30032000.workers.dev"; // ⚠️ SUBSTITUA PELA SUA URL REAL
-
-        // ========== SIMULAÇÃO DE USUÁRIO ==========
+        // Configuração do Worker (substitua pela sua URL real)
+        const WORKER_URL = "https://proxy-openrouter.SEU_USUARIO.workers.dev";
+        
         let userTier = 'free';
         let monthlyUsage = parseInt(localStorage.getItem('monthlyUsage')) || 0;
-        const currentMonth = new Date().getMonth() + '-' + new Date().getFullYear();
-        const storedMonth = localStorage.getItem('usageMonth');
-        if (storedMonth !== currentMonth) {
-            monthlyUsage = 0;
-            localStorage.setItem('usageMonth', currentMonth);
-        }
 
-        function updateUsageUI() {
-            // Atualiza indicador no menu (se houver)
-        }
-
-        function incrementUsage() {
-            if (userTier === 'free') {
-                monthlyUsage++;
-                localStorage.setItem('monthlyUsage', monthlyUsage);
-            }
-        }
-
-        function canAccessFullResenha() {
-            return userTier === 'premium' || monthlyUsage < 10;
-        }
-
-        // ========== DADOS DAS 8 GRANDES ÁREAS DO CNPq ==========
         const grandesAreas = [
             { id:1, nome:"Ciências Exatas e da Terra", icone:"🧮", cor:"#E8F0FE", subareas:["Matemática","Probabilidade e Estatística","Ciência da Computação","Astronomia","Física","Química","Geociências","Oceanografia"] },
             { id:2, nome:"Ciências Biológicas", icone:"🧬", cor:"#E6F3E6", subareas:["Biologia Geral","Genética","Botânica","Zoologia","Ecologia","Morfologia","Fisiologia","Bioquímica","Biofísica","Farmacologia","Imunologia","Microbiologia","Parasitologia"] },
-            { id:3, nome:"Engenharias", icone:"⚙️", cor:"#FEF3E0", subareas:["Engenharia Civil","Engenharia Elétrica","Engenharia Mecânica","Engenharia Química","Engenharia Sanitária","Engenharia de Produção","Engenharia de Transportes","Engenharia Aeroespacial","Engenharia Biomédica"] },
+            { id:3, nome:"Engenharias", icone:"⚙️", cor:"#FEF3E0", subareas:["Engenharia Civil","Engenharia Elétrica","Engenharia Mecânica","Engenharia Química","Engenharia Sanitária","Engenharia de Produção","Engenharia Aeroespacial","Engenharia Biomédica"] },
             { id:4, nome:"Ciências da Saúde", icone:"🏥", cor:"#FCE4E4", subareas:["Medicina","Odontologia","Farmácia","Enfermagem","Nutrição","Saúde Coletiva","Fonoaudiologia","Fisioterapia","Terapia Ocupacional","Educação Física"] },
             { id:5, nome:"Ciências Agrárias", icone:"🌱", cor:"#E8F5E9", subareas:["Agronomia","Recursos Florestais","Engenharia Agrícola","Zootecnia","Medicina Veterinária","Recursos Pesqueiros","Ciência e Tecnologia de Alimentos"] },
-            { id:6, nome:"Ciências Sociais Aplicadas", icone:"📊", cor:"#F3E5F5", subareas:["Direito","Administração","Economia","Arquitetura e Urbanismo","Planejamento Urbano e Regional","Demografia","Ciência da Informação","Museologia","Comunicação","Serviço Social","Economia Doméstica","Turismo"] },
-            { id:7, nome:"Ciências Humanas", icone:"🧠", cor:"#FFF8E1", subareas:["Filosofia","Sociologia","Antropologia","Arqueologia","História","Geografia","Psicologia","Educação","Ciência Política","Teologia"] },
+            { id:6, nome:"Ciências Sociais Aplicadas", icone:"📊", cor:"#F3E5F5", subareas:["Direito","Administração","Economia","Arquitetura","Demografia","Ciência da Informação","Comunicação","Serviço Social","Turismo"] },
+            { id:7, nome:"Ciências Humanas", icone:"🧠", cor:"#FFF8E1", subareas:["Filosofia","Sociologia","Antropologia","História","Geografia","Psicologia","Educação","Ciência Política"] },
             { id:8, nome:"Linguística, Letras e Artes", icone:"🎭", cor:"#FCE4EC", subareas:["Linguística","Letras","Artes","Música","Dança","Teatro","Cinema","Fotografia"] }
         ];
 
-        // ========== ARTIGOS MOCKADOS (COM RESENHAS GERADAS OU FIXAS) ==========
         const artigosMock = [
             { id:1, titulo:"Attention Is All You Need", autores:"Vaswani et al.", ano:2023, subarea:"Ciência da Computação", resenha:null },
             { id:2, titulo:"Sparks of AGI", autores:"Bubeck et al.", ano:2023, subarea:"Ciência da Computação", resenha:null },
@@ -747,7 +604,6 @@
             { id:8, titulo:"The Global Plastic Treaty", autores:"Simon et al.", ano:2025, subarea:"Ecologia", resenha:null }
         ];
 
-        // ========== ELEMENTOS DO DOM ==========
         const areaIconsRow = document.getElementById('areaIconsRow');
         const areaSelector = document.getElementById('areaSelector');
         const areaActiveIndicator = document.getElementById('areaActiveIndicator');
@@ -757,199 +613,119 @@
         const subareasGrid = document.getElementById('subareasGrid');
         const destaqueSection = document.getElementById('destaqueSection');
         const destaqueCards = document.getElementById('destaqueCards');
-        const mainNav = document.getElementById('mainNav');
-        const body = document.body;
 
         let areaAtual = null;
 
-        // ========== RENDERIZA ÍCONES DAS ÁREAS ==========
         function renderizarIcones() {
-            let html = '';
-            grandesAreas.forEach(area => {
-                html += `
-                    <button class="area-icon-btn" onclick="selecionarArea(${area.id})" id="icon-btn-${area.id}">
-                        <span class="area-emoji">${area.icone}</span>
-                        <span class="area-label">${area.nome}</span>
-                    </button>
-                `;
-            });
-            areaIconsRow.innerHTML = html;
+            areaIconsRow.innerHTML = grandesAreas.map(area => `
+                <button class="area-icon-btn" onclick="selecionarArea(${area.id})">
+                    <span class="area-emoji">${area.icone}</span>
+                    <span class="area-label">${area.nome}</span>
+                </button>
+            `).join('');
         }
 
-        // ========== SELECIONAR ÁREA ==========
         function selecionarArea(id) {
             const area = grandesAreas.find(a => a.id === id);
             if (!area) return;
             areaAtual = area;
-
             areaActiveIcon.textContent = area.icone;
             areaActiveNome.textContent = area.nome;
             areaActiveIndicator.classList.add('visible');
             areaSelector.style.display = 'none';
-            body.style.backgroundColor = area.cor;
-            mainNav.style.backgroundColor = area.cor;
-            mainNav.style.backdropFilter = 'none';
-
-            let htmlSub = '';
-            area.subareas.forEach((sub, index) => {
+            document.body.style.backgroundColor = area.cor;
+            subareasGrid.innerHTML = area.subareas.map((sub, i) => {
                 const count = artigosMock.filter(a => a.subarea === sub).length;
-                htmlSub += `
-                    <div class="subarea-card" onclick="filtrarArtigos('${sub}')" style="animation-delay: ${index * 0.05}s">
-                        <span class="subarea-icone">📄</span>
-                        <div>
-                            <span class="subarea-nome">${sub}</span>
-                            ${count > 0 ? `<br><span class="subarea-count">${count} artigo(s)</span>` : ''}
-                        </div>
-                    </div>
-                `;
-            });
-            subareasGrid.innerHTML = htmlSub;
+                return `<div class="subarea-card" onclick="filtrarArtigos('${sub}')" style="animation-delay:${i*0.05}s">
+                    <span class="subarea-icone">📄</span>
+                    <div><span class="subarea-nome">${sub}</span>${count ? `<br><span class="subarea-count">${count} artigo(s)</span>` : ''}</div>
+                </div>`;
+            }).join('');
             subareasContainer.classList.add('visible');
             destaqueSection.classList.remove('visible');
         }
 
-        // ========== VOLTAR AO SELETOR ==========
         function voltarParaSeletor() {
             areaAtual = null;
             areaSelector.style.display = 'block';
             areaActiveIndicator.classList.remove('visible');
             subareasContainer.classList.remove('visible');
             destaqueSection.classList.remove('visible');
-            body.style.backgroundColor = 'var(--bg)';
-            mainNav.style.backgroundColor = 'rgba(249,250,251,0.85)';
-            mainNav.style.backdropFilter = 'blur(20px)';
+            document.body.style.backgroundColor = 'var(--bg)';
         }
 
-        // ========== GERAR RESENHA COM IA (VIA WORKER) ==========
-        async function gerarResenhaComIA(artigo) {
-            const prompt = `Você é um curador acadêmico sênior. Escreva uma resenha crítica ROBUSTA em português (NO MÍNIMO 400 CARACTERES).
-            
-ESTRUTURA:
-1. CONTEXTO: Relevância atual.
-2. TESE CENTRAL: Principal descoberta.
-3. ANÁLISE CRÍTICA: Limitação ou implicação polêmica.
-4. PARA QUEM: Perfil do leitor.
-
-Título: ${artigo.titulo}
-Autores: ${artigo.autores}
-Área: ${artigo.subarea}
-Abstract: ${artigo.abstract || "Não disponível"}`;
-
-            try {
-                const resposta = await fetch(WORKER_URL, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        messages: [{ role: "user", content: prompt }],
-                        max_tokens: 800
-                    })
-                });
-                const data = await resposta.json();
-                if (data.error) throw new Error(data.details || data.error);
-                return data.choices[0].message.content.trim();
-            } catch (e) {
-                console.error(e);
-                return null; // Retorna null para usar fallback
-            }
-        }
-
-        // ========== FILTRAR ARTIGOS POR SUBÁREA ==========
         async function filtrarArtigos(subarea) {
             const artigos = artigosMock.filter(a => a.subarea === subarea);
-            if (artigos.length === 0) {
-                destaqueCards.innerHTML = '<p style="text-align:center;color:var(--text-secondary);">Nenhum artigo nesta subárea ainda. Em breve!</p>';
-            } else {
-                // Mostra skeleton loaders enquanto as resenhas não chegam
-                let html = '';
-                artigos.forEach(art => {
-                    html += `
-                        <div class="card" id="card-${art.id}">
-                            <h4 class="card-titulo">${art.titulo}</h4>
-                            <p class="card-autores">${art.autores} · ${art.ano}</p>
-                            <div class="card-resenha" id="resenha-${art.id}">
-                                <div class="skeleton-line" style="width:90%;"></div>
-                                <div class="skeleton-line" style="width:100%;"></div>
-                                <div class="skeleton-line" style="width:80%;"></div>
-                            </div>
-                            <div class="card-botoes">
-                                <button class="btn-podcast" onclick="window.open('https://open.spotify.com/search/${encodeURIComponent(art.titulo)}/podcasts','_blank')"><i class="fab fa-spotify"></i> Podcasts</button>
-                                <button class="btn-video" onclick="window.open('https://www.youtube.com/results?search_query=${encodeURIComponent(art.titulo)}','_blank')"><i class="fab fa-youtube"></i> Vídeos</button>
-                            </div>
-                            <button class="btn-regenerar" onclick="regenerarResenha(${art.id})"><i class="fas fa-sync-alt"></i> Regenerar</button>
-                        </div>
-                    `;
-                });
-                destaqueCards.innerHTML = html;
+            destaqueCards.innerHTML = artigos.length ? artigos.map(art => `
+                <div class="card">
+                    <h4 class="card-titulo">${art.titulo}</h4>
+                    <p class="card-autores">${art.autores} · ${art.ano}</p>
+                    <div class="card-resenha" id="resenha-${art.id}">Gerando...</div>
+                    <div class="blur-overlay" id="overlay-${art.id}" style="display:none;"></div>
+                    <div class="card-botoes">
+                        <button class="btn-podcast" onclick="window.open('https://open.spotify.com/search/${encodeURIComponent(art.titulo)}/podcasts','_blank')"><i class="fab fa-spotify"></i> Podcasts</button>
+                        <button class="btn-video" onclick="window.open('https://www.youtube.com/results?search_query=${encodeURIComponent(art.titulo)}','_blank')"><i class="fab fa-youtube"></i> Vídeos</button>
+                    </div>
+                    <button class="btn-regenerar" onclick="regenerarResenha(${art.id})"><i class="fas fa-sync-alt"></i> Regenerar</button>
+                </div>
+            `).join('') : '<p style="text-align:center;">Nenhum artigo nesta subárea ainda.</p>';
 
-                // Carrega as resenhas (do cache ou da IA)
-                for (let art of artigos) {
-                    const resenhaEl = document.getElementById(`resenha-${art.id}`);
-                    if (art.resenha) {
-                        exibirResenha(art, resenhaEl);
-                    } else {
-                        const resenhaGerada = await gerarResenhaComIA(art);
-                        if (resenhaGerada) {
-                            art.resenha = resenhaGerada;
-                        } else {
-                            art.resenha = "Resenha temporariamente indisponível. Clique em 'Regenerar' para tentar novamente.";
-                        }
-                        exibirResenha(art, resenhaEl);
-                    }
-                }
-            }
-            destaqueSection.classList.add('visible');
+            artigos.forEach(async art => {
+                const el = document.getElementById(`resenha-${art.id}`);
+                if (!art.resenha) art.resenha = await gerarResenha(art);
+                exibirResenha(art, el);
+            });
+
+            destaqueSection.style.display = 'block';
             destaqueSection.scrollIntoView({ behavior: 'smooth' });
         }
 
-        function exibirResenha(artigo, elemento) {
-            if (!artigo.resenha) return;
-            const textoCompleto = artigo.resenha;
+        async function gerarResenha(art) {
+            try {
+                const res = await fetch(WORKER_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ messages: [{ role: "user", content: `Resenha crítica sobre: ${art.titulo}. Autores: ${art.autores}. Área: ${art.subarea}.` }], max_tokens: 600 })
+                });
+                const data = await res.json();
+                return data.choices?.[0]?.message?.content || "Resenha indisponível.";
+            } catch { return "Erro ao gerar resenha."; }
+        }
 
-            if (canAccessFullResenha()) {
-                elemento.textContent = textoCompleto;
-                elemento.classList.remove('blurred');
-                incrementUsage();
+        function exibirResenha(art, el) {
+            const texto = art.resenha;
+            if (userTier === 'premium' || monthlyUsage < 10) {
+                el.textContent = texto;
+                if (userTier !== 'premium') monthlyUsage++;
             } else {
-                const preview = textoCompleto.substring(0, 150) + '...';
-                elemento.textContent = preview;
-                elemento.classList.add('blurred');
-                const overlayDiv = document.createElement('div');
-                overlayDiv.className = 'blur-overlay';
-                overlayDiv.innerHTML = `<button class="btn-unlock" onclick="showUpgradeModal()"><i class="fas fa-lock"></i> Desbloquear resenha completa</button>`;
-                elemento.parentNode.insertBefore(overlayDiv, elemento.nextSibling);
+                el.textContent = texto.substring(0, 150) + '...';
+                el.classList.add('blurred');
+                const overlay = document.getElementById(`overlay-${art.id}`);
+                if (overlay) {
+                    overlay.style.display = 'block';
+                    overlay.innerHTML = `<button class="btn-unlock" onclick="document.getElementById('upgradeModal').classList.add('active')"><i class="fas fa-lock"></i> Desbloquear resenha completa</button>`;
+                }
             }
         }
 
-        // ========== REGENERAR RESENHA ==========
         window.regenerarResenha = async function(id) {
             const art = artigosMock.find(a => a.id === id);
-            if (!art) return;
-            const resenhaEl = document.getElementById(`resenha-${art.id}`);
-            resenhaEl.innerHTML = '<div class="skeleton-line" style="width:90%;"></div><div class="skeleton-line" style="width:100%;"></div><div class="skeleton-line" style="width:80%;"></div>';
-            art.resenha = await gerarResenhaComIA(art);
-            if (!art.resenha) art.resenha = "Erro ao gerar resenha. Tente novamente.";
-            // Recria o card para atualizar blur/overlay
-            const subareaAtual = areaAtual ? areaAtual.subareas.find(s => artigosMock.some(a => a.subarea === s && a.id === art.id)) : null;
-            if (subareaAtual) filtrarArtigos(subareaAtual);
+            if (art) {
+                art.resenha = await gerarResenha(art);
+                const el = document.getElementById(`resenha-${art.id}`);
+                if (el) exibirResenha(art, el);
+            }
         };
 
-        // ========== MODAL PREMIUM ==========
-        const modal = document.getElementById('upgradeModal');
-        window.showUpgradeModal = () => modal.classList.add('active');
-        document.getElementById('closeModalBtn').onclick = () => modal.classList.remove('active');
         document.getElementById('simulatePaymentBtn').onclick = () => {
             userTier = 'premium';
-            modal.classList.remove('active');
-            if (areaAtual) {
-                const subareas = areaAtual.subareas;
-                if (subareas.length > 0) filtrarArtigos(subareas[0]);
-            }
-            alert('✅ Assinatura Premium simulada! Agora você tem acesso ilimitado e sem blur.');
+            document.getElementById('upgradeModal').classList.remove('active');
+            if (areaAtual) filtrarArtigos(areaAtual.subareas[0]);
         };
 
-        // ========== INICIALIZA ==========
+        document.getElementById('closeModalBtn').onclick = () => document.getElementById('upgradeModal').classList.remove('active');
+
         renderizarIcones();
     </script>
-
 </body>
 </html>
