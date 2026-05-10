@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resenha & Podcasts Acadêmicos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: #F9FAFB; color: #1F2937; padding: 2rem 1rem; }
+        h1 { font-family: 'Playfair Display', serif; text-align: center; font-size: 2rem; margin-bottom: 0.5rem; }
+        .subtitle { text-align: center; color: #6B7280; margin-bottom: 2rem; }
+        .areas-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; max-width: 800px; margin: 0 auto; }
+        .area-card { background: white; border: 1px solid #E5E7EB; border-radius: 14px; padding: 1.5rem; text-align: center; cursor: pointer; width: 100px; transition: all 0.2s; }
+        .area-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
+        .area-card .emoji { font-size: 2rem; display: block; margin-bottom: 0.5rem; }
+        .area-card .nome { font-size: 0.7rem; font-weight: 600; color: #6B7280; }
+        .footer { text-align: center; padding: 2rem 1.5rem; color: #9CA3AF; font-size: 0.8rem; border-top: 1px solid #E5E7EB; margin-top: 3rem; }
+    </style>
+</head>
+<body>
+    <h1>Explore pelas grandes áreas do conhecimento</h1>
+    <p class="subtitle">Selecione uma área para descobrir artigos e subáreas.</p>
+
+    <div class="areas-grid" id="areasGrid"></div>
+
+    <footer class="footer">
+        <p><strong>📚 COMO TRABALHAMOS:</strong> O Resenha & Podcasts <strong>NÃO</strong> armazena, distribui ou reproduz artigos científicos na íntegra. Nosso trabalho é exclusivamente de <strong>CURADORIA</strong>.</p>
+        <p>&copy; 2026 Resenha & Podcasts Acadêmicos.</p>
+    </footer>
+
+    <script>
+        const areas = [
+            { nome:"Ciências Exatas e da Terra", emoji:"🧮" },
+            { nome:"Ciências Biológicas", emoji:"🧬" },
+            { nome:"Engenharias", emoji:"⚙️" },
+            { nome:"Ciências da Saúde", emoji:"🏥" },
+            { nome:"Ciências Agrárias", emoji:"🌱" },
+            { nome:"Ciências Sociais Aplicadas", emoji:"📊" },
+            { nome:"Ciências Humanas", emoji:"🧠" },
+            { nome:"Linguística, Letras e Artes", emoji:"🎭" }
+        ];
+
+        const grid = document.getElementById('areasGrid');
+
+        areas.forEach(area => {
+            const div = document.createElement('div');
+            div.className = 'area-card';
+            div.innerHTML = `<span class="emoji">${area.emoji}</span><span class="nome">${area.nome}</span>`;
+            div.onclick = () => alert('Área selecionada: ' + area.nome);
+            grid.appendChild(div);
+        });
+    </script>
+</body>
+</html>
