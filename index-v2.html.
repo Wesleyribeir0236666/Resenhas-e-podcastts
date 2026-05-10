@@ -577,7 +577,7 @@
 
     <script>
         // Configuração do Worker (substitua pela sua URL real)
-        const WORKER_URL = "https://proxy-openrouter.SEU_USUARIO.workers.dev";
+        const WORKER_URL = "https://crimson-hall-565c.wy30032000.workers.dev";
         
         let userTier = 'free';
         let monthlyUsage = parseInt(localStorage.getItem('monthlyUsage')) || 0;
