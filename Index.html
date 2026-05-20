@@ -6,52 +6,237 @@
     <title>Resenha & Podcasts Acadêmicos</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        :root {
+            --bg: #F9FAFB; --card-bg: #FFFFFF; --text-primary: #1F2937; --text-secondary: #6B7280;
+            --text-tertiary: #9CA3AF; --border: #E5E7EB; --border-hover: #D1D5DB;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.03); --shadow-md: 0 4px 12px rgba(0,0,0,0.05);
+            --shadow-lg: 0 12px 28px rgba(0,0,0,0.08); --radius: 18px; --radius-sm: 12px;
+            --transition: 0.25s cubic-bezier(0.25, 0.1, 0.25, 1); --roxo: #8B5CF6;
+            --roxo-hover: #7C3AED; --verde-spotify: #1DB954; --dourado: #F59E0B; --dourado-hover: #D97706;
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: #F9FAFB; color: #1F2937; padding: 2rem 1rem; }
-        h1 { font-family: 'Playfair Display', serif; text-align: center; font-size: 2rem; margin-bottom: 0.5rem; }
-        .subtitle { text-align: center; color: #6B7280; margin-bottom: 2rem; }
-        .areas-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; max-width: 800px; margin: 0 auto; }
-        .area-card { background: white; border: 1px solid #E5E7EB; border-radius: 14px; padding: 1.5rem; text-align: center; cursor: pointer; width: 100px; transition: all 0.2s; }
-        .area-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
-        .area-card .emoji { font-size: 2rem; display: block; margin-bottom: 0.5rem; }
-        .area-card .nome { font-size: 0.7rem; font-weight: 600; color: #6B7280; }
-        .footer { text-align: center; padding: 2rem 1.5rem; color: #9CA3AF; font-size: 0.8rem; border-top: 1px solid #E5E7EB; margin-top: 3rem; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text-primary); line-height: 1.6; -webkit-font-smoothing: antialiased; min-height: 100vh; transition: background-color 0.5s ease; }
+        .nav { position: sticky; top: 0; z-index: 100; background: rgba(249,250,251,0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); padding: 0 1.5rem; transition: background-color 0.5s ease; }
+        .nav-inner { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 56px; }
+        .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; color: var(--text-primary); text-decoration: none; display: flex; align-items: center; gap: 0.5rem; }
+        .nav-links { display: flex; gap: 2.2rem; list-style: none; }
+        .nav-links a { font-size: 0.85rem; font-weight: 500; color: var(--text-secondary); text-decoration: none; cursor: pointer; transition: color 0.15s; }
+        .nav-links a:hover { color: var(--text-primary); }
+        .main-content { max-width: 1200px; margin: 0 auto; padding: 2.5rem 1.5rem; }
+        .area-selector-container { text-align: center; margin-top: 2rem; }
+        .area-selector-title { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text-primary); }
+        .area-selector-subtitle { color: var(--text-secondary); margin-bottom: 2.5rem; }
+        .area-icons-row { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+        .area-icon-btn { width: 88px; height: 88px; border-radius: var(--radius-sm); background: var(--card-bg); border: 1px solid var(--border); box-shadow: var(--shadow-sm); cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.4rem; transition: all var(--transition); color: var(--text-primary); }
+        .area-icon-btn:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--border-hover); }
+        .area-icon-btn .area-emoji { font-size: 2rem; }
+        .area-icon-btn .area-label { font-size: 0.7rem; font-weight: 600; color: var(--text-secondary); }
+        .area-active-indicator { display: none; align-items: center; gap: 0.75rem; margin-bottom: 2rem; opacity: 0; transform: translateY(-10px); transition: all 0.4s ease; }
+        .area-active-indicator.visible { display: flex; opacity: 1; transform: translateY(0); }
+        .area-active-icon { width: 48px; height: 48px; border-radius: 12px; background: var(--card-bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+        .area-active-nome { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 600; }
+        .btn-fechar-area { background: none; border: none; color: var(--text-tertiary); cursor: pointer; font-size: 1.3rem; margin-left: auto; transition: all 0.2s; }
+        .btn-fechar-area:hover { color: var(--text-primary); transform: rotate(90deg); }
+        .subareas-container { display: none; opacity: 0; transition: opacity 0.4s ease; }
+        .subareas-container.visible { display: block; opacity: 1; }
+        .subareas-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+        .subarea-card { background: var(--card-bg); border-radius: var(--radius-sm); padding: 1.25rem; cursor: pointer; border: 1px solid var(--border); box-shadow: var(--shadow-sm); display: flex; align-items: center; gap: 0.75rem; transition: all var(--transition); animation: fadeInUp 0.35s forwards; opacity: 0; transform: translateY(10px); }
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+        .subarea-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--roxo); }
+        .subarea-icone { font-size: 1.4rem; }
+        .subarea-nome { font-weight: 600; font-size: 0.9rem; }
+        .subarea-count { font-size: 0.7rem; color: var(--text-tertiary); }
+        .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem; }
+        .card { background: var(--card-bg); border-radius: var(--radius); padding: 1.6rem; border: 1px solid var(--border); box-shadow: var(--shadow-sm); transition: all var(--transition); display: flex; flex-direction: column; }
+        .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+        .card-titulo { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; margin-bottom: 0.35rem; }
+        .card-autores { font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.75rem; }
+        .card-resenha { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.55; flex-grow: 1; margin-bottom: 1.2rem; }
+        .card-resenha.blurred { max-height: 70px; overflow: hidden; position: relative; }
+        .card-resenha.blurred::after { content: ""; position: absolute; bottom: 0; left: 0; right: 0; height: 35px; background: linear-gradient(to bottom, transparent, var(--card-bg)); }
+        .blur-overlay { text-align: center; margin: -15px 0 15px; }
+        .btn-unlock { background: var(--dourado); border: none; color: #1F2937; font-weight: 600; padding: 8px 20px; border-radius: 40px; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.4rem; transition: all 0.2s; }
+        .btn-unlock:hover { background: var(--dourado-hover); transform: translateY(-1px); }
+        .card-botoes { display: flex; gap: 0.6rem; margin-top: auto; }
+        .btn-podcast, .btn-video { flex: 1; padding: 0.65rem; border-radius: 50px; font-weight: 500; font-size: 0.8rem; cursor: pointer; border: none; display: flex; align-items: center; justify-content: center; gap: 0.4rem; transition: all 0.2s; }
+        .btn-podcast { background: var(--verde-spotify); color: white; }
+        .btn-podcast:hover { background: #1ed760; transform: translateY(-1px); }
+        .btn-video { background: #EF4444; color: white; }
+        .btn-video:hover { background: #DC2626; transform: translateY(-1px); }
+        .btn-regenerar { background: transparent; border: 1px solid var(--border); color: var(--text-secondary); padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.75rem; cursor: pointer; margin-top: 0.8rem; transition: all 0.2s; }
+        .btn-regenerar:hover { border-color: var(--roxo); color: var(--roxo); }
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 1000; visibility: hidden; opacity: 0; transition: all 0.25s; }
+        .modal-overlay.active { visibility: visible; opacity: 1; }
+        .modal { background: var(--card-bg); max-width: 400px; width: 90%; border-radius: 24px; padding: 2rem; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .modal h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 0.5rem; }
+        .modal .price { font-size: 2.2rem; font-weight: 700; margin: 1rem 0; }
+        .modal .price small { font-size: 1rem; font-weight: 400; color: var(--text-secondary); }
+        .modal ul { text-align: left; margin: 1.5rem 0; list-style: none; }
+        .modal li { margin-bottom: 10px; color: var(--text-secondary); font-size: 0.9rem; }
+        .modal li i { color: #10B981; margin-right: 10px; }
+        .btn-primary { background: var(--roxo); color: white; border: none; padding: 0.9rem 2rem; border-radius: 60px; font-weight: 600; font-size: 1rem; width: 100%; cursor: pointer; transition: all 0.2s; }
+        .btn-primary:hover { background: var(--roxo-hover); transform: translateY(-2px); }
+        .modal-close { display: block; margin-top: 1rem; color: var(--text-tertiary); cursor: pointer; font-size: 0.85rem; text-decoration: underline; }
+        .footer { text-align: center; padding: 2rem 1.5rem; color: var(--text-tertiary); font-size: 0.8rem; border-top: 1px solid var(--border); background: var(--card-bg); }
+        .destaque-section { display: none; margin-top: 2rem; }
+        .destaque-section.visible { display: block; }
+        @media (max-width: 768px) { .area-selector-title { font-size: 1.8rem; } .area-icons-row { gap: 0.6rem; } .area-icon-btn { width: 72px; height: 72px; } .area-icon-btn .area-emoji { font-size: 1.6rem; } .subareas-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); } .cards-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
-    <h1>Explore pelas grandes áreas do conhecimento</h1>
-    <p class="subtitle">Selecione uma área para descobrir artigos e subáreas.</p>
-
-    <div class="areas-grid" id="areasGrid"></div>
-
-    <footer class="footer">
-        <p><strong>📚 COMO TRABALHAMOS:</strong> O Resenha & Podcasts <strong>NÃO</strong> armazena, distribui ou reproduz artigos científicos na íntegra. Nosso trabalho é exclusivamente de <strong>CURADORIA</strong>.</p>
-        <p>&copy; 2026 Resenha & Podcasts Acadêmicos.</p>
-    </footer>
-
+    <nav class="nav" id="mainNav"><div class="nav-inner"><a href="index.html" class="nav-logo">☕ Resenha & Podcasts</a><ul class="nav-links"><li><a href="index.html">Resenhas</a></li><li><a href="podcast.html">Café & Carreira</a></li><li><a onclick="alert('Em breve!')">Minha Conta</a></li></ul></div></nav>
+    <main class="main-content" id="mainContent">
+        <div class="area-selector-container" id="areaSelector"><h1 class="area-selector-title">Explore pelas grandes áreas do conhecimento</h1><p class="area-selector-subtitle">Selecione uma área para descobrir artigos e subáreas.</p><div class="area-icons-row" id="areaIconsRow"></div></div>
+        <div class="area-active-indicator" id="areaActiveIndicator"><div class="area-active-icon" id="areaActiveIcon"></div><span class="area-active-nome" id="areaActiveNome"></span><button class="btn-fechar-area" onclick="voltarParaSeletor()">✕</button></div>
+        <div class="subareas-container" id="subareasContainer"><h2 style="font-family:'Playfair Display',serif; font-weight:600; margin-bottom:1rem;">Subáreas</h2><div class="subareas-grid" id="subareasGrid"></div></div>
+        <div class="destaque-section" id="destaqueSection"><h2 style="font-family:'Playfair Display',serif; font-weight:600; margin-bottom:1rem;">Artigos em Destaque</h2><div class="cards-grid" id="destaqueCards"></div></div>
+    </main>
+    <div class="modal-overlay" id="upgradeModal"><div class="modal"><i class="fas fa-crown" style="font-size:2.5rem; color:var(--dourado);"></i><h2>Resenha Premium</h2><p style="color:var(--text-secondary);">Acesso ilimitado a análises completas</p><div class="price">R$ 19,90 <small>/mês</small></div><ul><li><i class="fas fa-check-circle"></i> Resenhas de <strong>400+ caracteres</strong></li><li><i class="fas fa-check-circle"></i> Análise crítica sem blur</li><li><i class="fas fa-check-circle"></i> Acesso ilimitado</li><li><i class="fas fa-check-circle"></i> Conexão com podcasts e vídeos</li></ul><button class="btn-primary" id="simulatePaymentBtn"><i class="fas fa-lock-open"></i> Assinar Agora (Simular)</button><div class="modal-close" id="closeModalBtn">Talvez mais tarde</div></div></div>
+    <footer class="footer"><div style="max-width:700px; margin:0 auto 1rem; font-size:0.75rem; color:var(--text-secondary);"><strong>📚 COMO TRABALHAMOS:</strong> O Resenha & Podcasts <strong>NÃO</strong> armazena, distribui ou reproduz artigos científicos na íntegra. Nosso trabalho é exclusivamente de <strong>CURADORIA</strong>: lemos, analisamos e produzimos resenhas críticas, sempre indicando a fonte original.</div><p>&copy; 2026 Resenha & Podcasts Acadêmicos.</p></footer>
     <script>
-        const areas = [
-            { nome:"Ciências Exatas e da Terra", emoji:"🧮" },
-            { nome:"Ciências Biológicas", emoji:"🧬" },
-            { nome:"Engenharias", emoji:"⚙️" },
-            { nome:"Ciências da Saúde", emoji:"🏥" },
-            { nome:"Ciências Agrárias", emoji:"🌱" },
-            { nome:"Ciências Sociais Aplicadas", emoji:"📊" },
-            { nome:"Ciências Humanas", emoji:"🧠" },
-            { nome:"Linguística, Letras e Artes", emoji:"🎭" }
+        const WORKER_URL = "https://crimson-hall-565c.wy30032000.workers.dev";
+        let userTier = 'free';
+        let monthlyUsage = parseInt(localStorage.getItem('monthlyUsage')) || 0;
+        const grandesAreas = [
+            { id:1, nome:"Ciências Exatas e da Terra", icone:"🧮", cor:"#E8F0FE", subareas:["Matemática","Probabilidade e Estatística","Ciência da Computação","Astronomia","Física","Química","Geociências","Oceanografia"] },
+            { id:2, nome:"Ciências Biológicas", icone:"🧬", cor:"#E6F3E6", subareas:["Biologia Geral","Genética","Botânica","Zoologia","Ecologia","Morfologia","Fisiologia","Bioquímica","Biofísica","Farmacologia","Imunologia","Microbiologia","Parasitologia"] },
+            { id:3, nome:"Engenharias", icone:"⚙️", cor:"#FEF3E0", subareas:["Engenharia Civil","Engenharia Elétrica","Engenharia Mecânica","Engenharia Química","Engenharia Sanitária","Engenharia de Produção","Engenharia Aeroespacial","Engenharia Biomédica"] },
+            { id:4, nome:"Ciências da Saúde", icone:"🏥", cor:"#FCE4E4", subareas:["Medicina","Odontologia","Farmácia","Enfermagem","Nutrição","Saúde Coletiva","Fonoaudiologia","Fisioterapia","Terapia Ocupacional","Educação Física"] },
+            { id:5, nome:"Ciências Agrárias", icone:"🌱", cor:"#E8F5E9", subareas:["Agronomia","Recursos Florestais","Engenharia Agrícola","Zootecnia","Medicina Veterinária","Recursos Pesqueiros","Ciência e Tecnologia de Alimentos"] },
+            { id:6, nome:"Ciências Sociais Aplicadas", icone:"📊", cor:"#F3E5F5", subareas:["Direito","Administração","Economia","Arquitetura","Demografia","Ciência da Informação","Comunicação","Serviço Social","Turismo"] },
+            { id:7, nome:"Ciências Humanas", icone:"🧠", cor:"#FFF8E1", subareas:["Filosofia","Sociologia","Antropologia","História","Geografia","Psicologia","Educação","Ciência Política"] },
+            { id:8, nome:"Linguística, Letras e Artes", icone:"🎭", cor:"#FCE4EC", subareas:["Linguística","Letras","Artes","Música","Dança","Teatro","Cinema","Fotografia"] }
         ];
+        const artigosMock = [
+            { id:1, titulo:"Attention Is All You Need", autores:"Vaswani et al.", ano:2023, subarea:"Ciência da Computação", resenha:null },
+            { id:2, titulo:"Sparks of AGI", autores:"Bubeck et al.", ano:2023, subarea:"Ciência da Computação", resenha:null },
+            { id:3, titulo:"GLP-1 Agonists: Beyond Diabetes", autores:"Drucker & Holst", ano:2024, subarea:"Medicina", resenha:null },
+            { id:4, titulo:"Lecanemab in Alzheimer's", autores:"van Dyck et al.", ano:2022, subarea:"Medicina", resenha:null },
+            { id:5, titulo:"Exceeding 1.5°C triggers tipping points", autores:"McKay et al.", ano:2022, subarea:"Geociências", resenha:null },
+            { id:6, titulo:"What Is It Like to Be a LLM?", autores:"Chalmers", ano:2023, subarea:"Filosofia", resenha:null }
+        ];
+        const areaIconsRow = document.getElementById('areaIconsRow');
+        const areaSelector = document.getElementById('areaSelector');
+        const areaActiveIndicator = document.getElementById('areaActiveIndicator');
+        const areaActiveIcon = document.getElementById('areaActiveIcon');
+        const areaActiveNome = document.getElementById('areaActiveNome');
+        const subareasContainer = document.getElementById('subareasContainer');
+        const subareasGrid = document.getElementById('subareasGrid');
+        const destaqueSection = document.getElementById('destaqueSection');
+        const destaqueCards = document.getElementById('destaqueCards');
+        let areaAtual = null;
 
-        const grid = document.getElementById('areasGrid');
+        function renderizarIcones() {
+            areaIconsRow.innerHTML = grandesAreas.map(area => `
+                <button class="area-icon-btn" onclick="selecionarArea(${area.id})">
+                    <span class="area-emoji">${area.icone}</span>
+                    <span class="area-label">${area.nome}</span>
+                </button>
+            `).join('');
+        }
 
-        areas.forEach(area => {
-            const div = document.createElement('div');
-            div.className = 'area-card';
-            div.innerHTML = `<span class="emoji">${area.emoji}</span><span class="nome">${area.nome}</span>`;
-            div.onclick = () => alert('Área selecionada: ' + area.nome);
-            grid.appendChild(div);
-        });
+        function selecionarArea(id) {
+            const area = grandesAreas.find(a => a.id === id);
+            if (!area) return;
+            areaAtual = area;
+            areaActiveIcon.textContent = area.icone;
+            areaActiveNome.textContent = area.nome;
+            areaActiveIndicator.classList.add('visible');
+            areaSelector.style.display = 'none';
+            document.body.style.backgroundColor = area.cor;
+            subareasGrid.innerHTML = area.subareas.map((sub, i) => {
+                const count = artigosMock.filter(a => a.subarea === sub).length;
+                return `<div class="subarea-card" onclick="filtrarArtigos('${sub}')" style="animation-delay:${i*0.05}s">
+                    <span class="subarea-icone">📄</span>
+                    <div><span class="subarea-nome">${sub}</span>${count ? `<br><span class="subarea-count">${count} artigo(s)</span>` : ''}</div>
+                </div>`;
+            }).join('');
+            subareasContainer.classList.add('visible');
+            destaqueSection.classList.remove('visible');
+        }
+
+        function voltarParaSeletor() {
+            areaAtual = null;
+            areaSelector.style.display = 'block';
+            areaActiveIndicator.classList.remove('visible');
+            subareasContainer.classList.remove('visible');
+            destaqueSection.classList.remove('visible');
+            document.body.style.backgroundColor = 'var(--bg)';
+        }
+
+        async function filtrarArtigos(subarea) {
+            const artigos = artigosMock.filter(a => a.subarea === subarea);
+            destaqueCards.innerHTML = artigos.length ? artigos.map(art => `
+                <div class="card">
+                    <h4 class="card-titulo">${art.titulo}</h4>
+                    <p class="card-autores">${art.autores} · ${art.ano}</p>
+                    <div class="card-resenha" id="resenha-${art.id}">Gerando...</div>
+                    <div class="blur-overlay" id="overlay-${art.id}" style="display:none;"></div>
+                    <div class="card-botoes">
+                        <button class="btn-podcast" onclick="window.open('https://open.spotify.com/search/${encodeURIComponent(art.titulo)}/podcasts','_blank')"><i class="fab fa-spotify"></i> Podcasts</button>
+                        <button class="btn-video" onclick="window.open('https://www.youtube.com/results?search_query=${encodeURIComponent(art.titulo)}','_blank')"><i class="fab fa-youtube"></i> Vídeos</button>
+                    </div>
+                    <button class="btn-regenerar" onclick="regenerarResenha(${art.id})"><i class="fas fa-sync-alt"></i> Regenerar</button>
+                </div>
+            `).join('') : '<p style="text-align:center;">Nenhum artigo nesta subárea ainda.</p>';
+            artigos.forEach(async art => {
+                const el = document.getElementById(`resenha-${art.id}`);
+                if (!art.resenha) art.resenha = await gerarResenha(art);
+                exibirResenha(art, el);
+            });
+            destaqueSection.classList.add('visible');
+            destaqueSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        async function gerarResenha(art) {
+            try {
+                const res = await fetch(WORKER_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ messages: [{ role: "user", content: `Resenha crítica sobre: ${art.titulo}. Autores: ${art.autores}. Área: ${art.subarea}.` }], max_tokens: 600 })
+                });
+                const data = await res.json();
+                return data.choices?.[0]?.message?.content || "Resenha indisponível.";
+            } catch { return "Erro ao gerar resenha."; }
+        }
+
+        function exibirResenha(art, el) {
+            const texto = art.resenha;
+            if (userTier === 'premium' || monthlyUsage < 10) {
+                el.textContent = texto;
+                if (userTier !== 'premium') monthlyUsage++;
+            } else {
+                el.textContent = texto.substring(0, 150) + '...';
+                el.classList.add('blurred');
+                const overlay = document.getElementById(`overlay-${art.id}`);
+                if (overlay) {
+                    overlay.style.display = 'block';
+                    overlay.innerHTML = `<button class="btn-unlock" onclick="document.getElementById('upgradeModal').classList.add('active')"><i class="fas fa-lock"></i> Desbloquear resenha completa</button>`;
+                }
+            }
+        }
+
+        window.regenerarResenha = async function(id) {
+            const art = artigosMock.find(a => a.id === id);
+            if (art) {
+                art.resenha = await gerarResenha(art);
+                const el = document.getElementById(`resenha-${art.id}`);
+                if (el) exibirResenha(art, el);
+            }
+        };
+
+        document.getElementById('simulatePaymentBtn').onclick = () => {
+            userTier = 'premium';
+            document.getElementById('upgradeModal').classList.remove('active');
+            if (areaAtual) filtrarArtigos(areaAtual.subareas[0]);
+        };
+
+        document.getElementById('closeModalBtn').onclick = () => document.getElementById('upgradeModal').classList.remove('active');
+
+        renderizarIcones();
     </script>
 </body>
 </html>
